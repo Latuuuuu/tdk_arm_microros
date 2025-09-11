@@ -18,6 +18,8 @@
 //extern TIM_HandleTypeDef htim4;
 //extern TIM_HandleTypeDef htim8;
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim12;
+
 //extern I2C_HandleTypeDef hi2c1;
 
 uint16_t adcRead[7] = {0};
@@ -40,9 +42,10 @@ void StartDefaultTask(void *argument)
 //    xTimer = xTimerCreate("MotorTimer", pdMS_TO_TICKS(1), pdTRUE, (void *)0, motorTimerCallback);
 //    xTimerStart(xTimer, 0);
 //    HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
+	HAL_TIM_Base_Start_IT(&htim4);
 	uros_init();
 	arm_reset();
-//    motor_init();
+    motor_init();
 //    pinpoint_init();
 //    HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1);
 //    HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
@@ -61,13 +64,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
 	if (htim->Instance == TIM4)
 	{
+		sec++;
 //		chassis_monitor();
 //		pinpoint_monitor();
-		if(arm_mission(code))
-		{
-			arm_pub_cb();
-		}
-		sec++;
+		arm_test();
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+//		__HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,300);
+
+//		if(arm_complete())
+//		{
+//			arm_pub_cb();
+//			code = 0;
+//		}
+//		else
+//		{
+//			if(code>0){
+//				arm_mission(code);
+//			}
+//		}
 	}
   /* USER CODE END Callback 0 */
 	if (htim->Instance == TIM6)

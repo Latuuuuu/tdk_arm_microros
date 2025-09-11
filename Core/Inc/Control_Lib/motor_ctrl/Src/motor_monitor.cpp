@@ -3,6 +3,7 @@
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim12;
 
 //trace :
 //1    PA0   ∧右
@@ -20,7 +21,7 @@ extern TIM_HandleTypeDef htim5;
 //    BR :B14   PC8      PA6/PA7
 //    BL :B15   PC9      PB6/PB7
 //
-MotorController Motor_cas(&htim1, &htim5, TIM_CHANNEL_2, GPIOA, GPIO_PIN_12, GPIOC, GPIO_PIN_4, 0.001, 0, 0);
+MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_1, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, 0.005, 0, 0);
 
 float VgoalFR = 0.0;
 float VgoalFL = 0.0;
@@ -46,6 +47,10 @@ void motor_monitor(void) {
 //    Motor_FL.getSpeed();
 }
 
-bool cascade_monitor(float target_height){
-	return Motor_cas.setgoal(target_height);
+bool cascade_complete(){
+	return Motor_cas.goal_reached();
+}
+
+void cascade_monitor(float target_height){
+	Motor_cas.setgoal(target_height);
 }

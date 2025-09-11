@@ -22,7 +22,8 @@ public:
     void init(int en_ctrl,int dir_ctrl);                        // Initialize the basic parameter
 //    void setSpeed(float speed);        // Set motor speed in RPS
 //    float getSpeed();                  // Return the current speed (Need to enable setSpeed())
-    bool setgoal(float target_height);
+    void setgoal(float target_height);
+    bool goal_reached();
 
 
 private:
@@ -46,6 +47,7 @@ private:
 //    float _pidOutput = 0.0;
 //    float _currentSpeed = 0;
 //    float _targetSpeed = 0;
+    float _targrt_height = 0.0;
     float _error = 0;
 //    float _lastError = 0;
     float _integral = 0;
@@ -60,8 +62,8 @@ private:
     const float CASCADE_STARTHIGHT = 250.0;
     int16_t _enc_count;
     float _u = 0.0;
-    int MAX_PWM = 40;
-    int MIN_PWM = 15;
+    int MAX_PWM = 1000;
+    int MIN_PWM = 150;
 //
 //    float ComputePID();                // PID controller
 //    float updateSpeed();               // Update the motor current speed

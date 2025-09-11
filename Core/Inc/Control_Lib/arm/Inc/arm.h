@@ -18,7 +18,8 @@ void menu_arm(void);
 void table_camera(void);
 void table_arm(void);
 void arm_test(void);
-bool arm_mission(int code);
+void arm_mission(int code);
+bool arm_complete();
 
 #ifdef __cplusplus
 }

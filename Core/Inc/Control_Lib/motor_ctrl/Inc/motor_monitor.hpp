@@ -7,7 +7,8 @@ extern "C" {
 
 /* Includes */
 void motor_monitor(void);
-bool cascade_monitor(float target_height);
+void cascade_monitor(float target_height);
+bool cascade_complete();
 
 #ifdef __cplusplus
 void motor_init();

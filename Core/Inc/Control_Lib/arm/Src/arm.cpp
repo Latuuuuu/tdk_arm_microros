@@ -7,6 +7,8 @@
 extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim12;
+
 
 // UART_servo 物件
 UART_servo servo1(1, 2000, &huart3);
@@ -48,6 +50,7 @@ void arm_reset(void) {
 	// 啟動 Encoder 與 PWM
 	HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_1);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
@@ -123,7 +126,8 @@ void arm_reset(void) {
 
 void menu_camera(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250)){
+	cascade_monitor(250);
+	if(cascade_complete()){
 		servo1.update_pos(pos1+70);
 		servo2.update_pos(pos2+70);
 		servo3.update_pos(gripper_open);
@@ -137,13 +141,17 @@ void menu_camera(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void menu_arm_1(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250+324)){
+	cascade_monitor(250+324);
+	if(cascade_complete()){
 		servo1.update_pos(pos1-18);
 		servo2.update_pos(pos2-18);
 		servo3.update_pos(gripper_open);
@@ -158,13 +166,17 @@ void menu_arm_1(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void menu_arm_2(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250+324)){
+	cascade_monitor(250+324);
+	if(cascade_complete()){
 		servo3.update_pos(gripper_close);
 		servo3.run();
 		if(current_time-last_command_time>2000){
@@ -173,13 +185,17 @@ void menu_arm_2(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void table_camera(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250+29)){
+	cascade_monitor(250+29);
+	if(cascade_complete()){
 		servo1.update_pos(pos1-19); //35
 		servo2.update_pos(pos2-19); //90
 		servo3.update_pos(gripper_close);
@@ -193,13 +209,17 @@ void table_camera(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void table_arm_1(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250+73)){
+	cascade_monitor(250+73);
+	if(cascade_complete()){
 		servo1.update_pos(pos1-56);
 		servo2.update_pos(pos2-56);
 		servo3.update_pos(gripper_close);
@@ -213,13 +233,17 @@ void table_arm_1(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void table_arm_2(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250+73)){
+	cascade_monitor(250+73);
+	if(cascade_complete()){
 		servo3.update_pos(gripper_open);
 		servo3.run();
 		if(current_time-last_command_time>2000){
@@ -228,13 +252,17 @@ void table_arm_2(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void table_arm_3(void) {
 	uint32_t current_time = HAL_GetTick();
-	if(cascade_monitor(250)){
+	cascade_monitor(250);
+	if(cascade_complete()){
 		servo1.update_pos(pos1+70);
 		servo2.update_pos(pos2+100);
 		servo3.update_pos(gripper_open);
@@ -247,21 +275,32 @@ void table_arm_3(void) {
 		}
 	}
 	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
 		last_command_time = current_time;
 	}
 }
 
 void arm_test(void) {
-	servo1.update_pos(pos1+a);
-	servo2.update_pos(pos2+b);
-	servo3.update_pos(gripper_open);
-	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
-	servo1.run();
-	servo2.run();
-	servo3.run();
+//	cascade_monitor(cascade_height);
+//	if(cascade_complete()){
+		servo1.update_pos(pos1+a);
+		servo2.update_pos(pos2+b);
+		servo3.update_pos(gripper_open);
+		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
+		servo1.run();
+		servo2.run();
+		servo3.run();
+//	}
+//	else{
+//		servo1.run();
+//		servo2.run();
+//		servo3.run();
+//	}
 }
 
-bool arm_mission(int code) {
+void arm_mission(int code) {
 	// 根據 code 執行不同的手臂任務
 	switch(code) {
 		case 1:
@@ -296,9 +335,16 @@ bool arm_mission(int code) {
 			// 預設情況
 			break;
 	}
-	if(all_status){
-		all_status = 0;
+}
+
+bool arm_complete(){
+	if(all_status)
+	{
+		all_status=0;
 		return 1;
 	}
-	else return 0;
+	else
+	{
+		return 0;
+	}
 }

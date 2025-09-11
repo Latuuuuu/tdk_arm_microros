@@ -1,9 +1,12 @@
 #include "motor_ctrl.hpp"
 int times = 0;
 uint32_t current_cnt;
+//extern TIM_HandleTypeDef htim12;
+
 void MotorController::init(int en_ctrl,int dir_ctrl) {
     HAL_TIM_Encoder_Start(_enc, TIM_CHANNEL_ALL);
     HAL_TIM_PWM_Start(_pwm, _channel);
+//	HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
     _dir_ctrl = dir_ctrl;
     _en_ctrl = en_ctrl;
 }
@@ -104,12 +107,11 @@ void MotorController::init(int en_ctrl,int dir_ctrl) {
 //    return _currentSpeed;
 //}
 
-bool MotorController::setgoal(float target_height) {
-
+void MotorController::setgoal(float target_height) {
+	_targrt_height  = target_height;
 	//如果碰到微動 設為起始高度 停止馬達
 	if(_cascade_height==250 && target_height < 250 && _check ==1){
 		_pwmValue = 0;
-		return 0;
 	}
 	if(_microswitch_touched==1 && _check ==0){
 		_cascade_height = CASCADE_STARTHIGHT;
@@ -117,13 +119,13 @@ bool MotorController::setgoal(float target_height) {
 
 		_pwmValue = 0; // 停止馬達
 		_check++;
-		return 0;
 	}
 	if(_microswitch_touched==0 && _check ==1) _check--;
 
 	// 讀取 encoder
-	_enc_count = __HAL_TIM_GET_COUNTER(_enc);
-	_enc_count = -_enc_count;
+
+	_enc_count = __HAL_TIM_GetCounter(_enc);
+//	_enc_count = -_enc_count;
 	__HAL_TIM_SET_COUNTER(_enc, 0);  // 歸零
 
 	// 計算累積距離
@@ -131,9 +133,8 @@ bool MotorController::setgoal(float target_height) {
 
 	// 判斷是否到點
 	_error = target_height - _cascade_height;
-	if(fabs(_error) <= 0.1) {
+	if(fabs(_error) <= 1) {
 		_pwmValue = 0; // 到點停
-		return 1;
 	}
 	float bound = 0.0;
 	if(_ki != 0.0) bound = 1.0 / _ki;
@@ -146,18 +147,27 @@ bool MotorController::setgoal(float target_height) {
 	else if(_u < -1 ) _u = -1;
 
 	if(_u<0){ //TEST馬達正反轉
-		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(_BGPIO, _BPin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(_BGPIO, _BPin, GPIO_PIN_SET);
 	}
 	else{
-		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_SET);//_AGPIO	_APin
 		HAL_GPIO_WritePin(_BGPIO, _BPin, GPIO_PIN_RESET);
 	}
 
 	// PWM 越接近越慢
 	_pwmValue = (int)(MAX_PWM * fabs(_u));
 	if(_pwmValue < MIN_PWM) _pwmValue = MIN_PWM;
+//	__HAL_TIM_SET_COMPARE(&htim12, TIM_CHANNEL_1, (uint16_t)_pwmValue);
 	__HAL_TIM_SET_COMPARE(_pwm, _channel, (uint16_t)_pwmValue);
+
+}
+
+bool MotorController::goal_reached(){
+	if(fabs(_cascade_height-_targrt_height )<=1){
+		__HAL_TIM_SET_COMPARE(_pwm, _channel,0);
+		return 1;
+	}
 	return 0;
 }
 //double MotorController::updateSpeed() {
