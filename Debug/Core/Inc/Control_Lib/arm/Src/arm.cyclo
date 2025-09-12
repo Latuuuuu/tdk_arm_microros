@@ -7,7 +7,7 @@
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:219:6:void table_arm_1()	3
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:243:6:void table_arm_2()	3
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:262:6:void table_arm_3()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:285:6:void arm_test()	1
+../Core/Inc/Control_Lib/arm/Src/arm.cpp:285:6:void arm_test()	2
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:303:6:void arm_mission(int)	11
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:340:6:bool arm_complete()	2
 ../Core/Inc/Control_Lib/arm/Src/arm.cpp:350:1:void __static_initialization_and_destruction_0()	1

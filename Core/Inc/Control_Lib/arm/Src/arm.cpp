@@ -50,9 +50,9 @@ void arm_reset(void) {
 	// 啟動 Encoder 與 PWM
 	HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
-	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_1);
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
+	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_4, GPIO_PIN_SET);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
 
 	servo1.update_pos(pos1+70);
@@ -283,8 +283,8 @@ void table_arm_3(void) {
 }
 
 void arm_test(void) {
-//	cascade_monitor(cascade_height);
-//	if(cascade_complete()){
+	cascade_monitor(500);
+	if(cascade_complete()){
 		servo1.update_pos(pos1+a);
 		servo2.update_pos(pos2+b);
 		servo3.update_pos(gripper_open);
@@ -292,12 +292,12 @@ void arm_test(void) {
 		servo1.run();
 		servo2.run();
 		servo3.run();
-//	}
-//	else{
-//		servo1.run();
-//		servo2.run();
-//		servo3.run();
-//	}
+	}
+	else{
+		servo1.run();
+		servo2.run();
+		servo3.run();
+	}
 }
 
 void arm_mission(int code) {

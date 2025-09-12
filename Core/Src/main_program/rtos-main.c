@@ -45,9 +45,8 @@ void StartDefaultTask(void *argument)
 	HAL_TIM_Base_Start_IT(&htim4);
 	uros_init();
 	arm_reset();
-    motor_init();
+//    motor_init();
 //    pinpoint_init();
-//    HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1);
 //    HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
 //    uros_init();
 //    trace_init();
@@ -67,22 +66,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		sec++;
 //		chassis_monitor();
 //		pinpoint_monitor();
-		arm_test();
+//		arm_test();
+//		__HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2, (uint16_t)300);
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+
 //		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
 //		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 //		__HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,300);
 
-//		if(arm_complete())
-//		{
-//			arm_pub_cb();
-//			code = 0;
-//		}
-//		else
-//		{
-//			if(code>0){
-//				arm_mission(code);
-//			}
-//		}
+		if(arm_complete())
+		{
+			arm_pub_cb();
+			code = 0;
+		}
+		else
+		{
+			if(code>0){
+				arm_mission(code);
+			}
+		}
 	}
   /* USER CODE END Callback 0 */
 	if (htim->Instance == TIM6)

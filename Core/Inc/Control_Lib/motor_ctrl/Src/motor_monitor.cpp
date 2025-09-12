@@ -21,7 +21,7 @@ extern TIM_HandleTypeDef htim12;
 //    BR :B14   PC8      PA6/PA7
 //    BL :B15   PC9      PB6/PB7
 //
-MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_1, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, 0.005, 0, 0);
+MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, 0.015, 0.0001, 0);
 
 float VgoalFR = 0.0;
 float VgoalFL = 0.0;

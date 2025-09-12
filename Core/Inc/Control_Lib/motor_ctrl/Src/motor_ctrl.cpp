@@ -125,7 +125,7 @@ void MotorController::setgoal(float target_height) {
 	// 讀取 encoder
 
 	_enc_count = __HAL_TIM_GetCounter(_enc);
-//	_enc_count = -_enc_count;
+	_enc_count = -_enc_count;
 	__HAL_TIM_SET_COUNTER(_enc, 0);  // 歸零
 
 	// 計算累積距離
@@ -147,16 +147,17 @@ void MotorController::setgoal(float target_height) {
 	else if(_u < -1 ) _u = -1;
 
 	if(_u<0){ //TEST馬達正反轉
-		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_RESET);
+//		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(_BGPIO, _BPin, GPIO_PIN_SET);
 	}
 	else{
-		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_SET);//_AGPIO	_APin
+//		HAL_GPIO_WritePin(_AGPIO, _APin, GPIO_PIN_SET);//_AGPIO	_APin
 		HAL_GPIO_WritePin(_BGPIO, _BPin, GPIO_PIN_RESET);
 	}
 
 	// PWM 越接近越慢
 	_pwmValue = (int)(MAX_PWM * fabs(_u));
+	if(_pwmValue > 500) _pwmValue = 500;
 	if(_pwmValue < MIN_PWM) _pwmValue = MIN_PWM;
 //	__HAL_TIM_SET_COMPARE(&htim12, TIM_CHANNEL_1, (uint16_t)_pwmValue);
 	__HAL_TIM_SET_COMPARE(_pwm, _channel, (uint16_t)_pwmValue);
