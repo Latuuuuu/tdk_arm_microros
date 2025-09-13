@@ -27,7 +27,7 @@ uint16_t adcRead[7] = {0};
 extern int code;
 double LastCNT = 0;
 double CNT = 500;
-int turn =0;
+int pulse =0;
 double currentsp = 0;
 int sec = 0;
 //PinpointI2C pinpoint(&hi2c1);
@@ -42,12 +42,13 @@ void StartDefaultTask(void *argument)
 //    xTimer = xTimerCreate("MotorTimer", pdMS_TO_TICKS(1), pdTRUE, (void *)0, motorTimerCallback);
 //    xTimerStart(xTimer, 0);
 //    HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
+	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
 	HAL_TIM_Base_Start_IT(&htim4);
 	uros_init();
 	arm_reset();
 //    motor_init();
 //    pinpoint_init();
-//    HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+//    HAL_TIM_Encoder_Start(&htim12, TIM_CHANNEL_ALL);
 //    uros_init();
 //    trace_init();
 
@@ -72,12 +73,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 //		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
 //		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-//		__HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_1,300);
+//		__HAL_TIM_SET_COMPARE(&htim12,TIM_CHANNEL_2,pulse);
+
 
 		if(arm_complete())
 		{
-			arm_pub_cb();
-			code = 0;
+			arm_pub_cb(1);
 		}
 		else
 		{

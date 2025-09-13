@@ -3,7 +3,7 @@
 #define REDUCTION_RATIO  64// Maximum duty cycle for PWM
 #define PWM_ARR 1000
 #define INTEGRAL_LIMIT 0.5
-#define DT 1 // ms
+#define DT 10 // ms
 
 // AX01                    B10
 // GO_1         T3C1       A6

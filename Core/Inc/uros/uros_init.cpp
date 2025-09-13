@@ -220,63 +220,65 @@ void uros_destroy_entities(void) {
 }
 
 void cmd_vel_sub_cb(const void* msgin) {
-  const geometry_msgs__msg__Twist * msg = (const geometry_msgs__msg__Twist *)msgin;
-  
-  // 检查消息指针是否有效
-  if (msg == NULL) {
-    return;
-  }
-  
-  cmd_vel_msg = *msg;
-
-  // 获取当前时间 (毫秒)
-  uint32_t current_time = HAL_GetTick();
-
-  // 计算时间差 (秒)
-  float dt = 0.0f;
-  if (last_cmd_vel_time != 0) {
-	dt = (current_time - last_cmd_vel_time) / 1000.0f;
-	float dx_robot = cmd_vel_msg.linear.x * dt;
-	float dy_robot = cmd_vel_msg.linear.y * dt;
-	//      float cos_yaw = cosf(current_yaw);
-	//      float sin_yaw = sinf(current_yaw);
-	//
-	//      float dx_world = dx_robot * cos_yaw - dy_robot * sin_yaw;
-	//      float dy_world = dx_robot * sin_yaw + dy_robot * cos_yaw;
-
-	  // 更新位置
-	//      pose_msg.pose.pose.position.x += dx_world;
-	//      pose_msg.pose.pose.position.y += dy_world;
-	  // pose_msg.pose.pose.position.z += cmd_vel_msg.linear.z * dt;
-	  pose_msg.pose.pose.position.x += dx_robot;
-	  pose_msg.pose.pose.position.y += dy_robot;
-
-	  // 更新偏航角
-	  current_yaw += cmd_vel_msg.angular.z * dt;
-
-	  // 将偏航角限制在 [-π, π] 范围内
-	  while (current_yaw > M_PI) current_yaw -= 2.0f * M_PI;
-	  while (current_yaw < -M_PI) current_yaw += 2.0f * M_PI;
-
-	  pose_msg.pose.pose.orientation.z = current_yaw;
-
-	  pose_msg.twist.twist.linear.x = cmd_vel_msg.linear.x;
-	  pose_msg.twist.twist.linear.y = cmd_vel_msg.linear.y;
-	  pose_msg.twist.twist.angular.z = cmd_vel_msg.angular.z;
-
-//	  rcl_publish(&pose_pub, &pose_msg, NULL);
-  }
-
-  last_cmd_vel_time = current_time;
+//  const geometry_msgs__msg__Twist * msg = (const geometry_msgs__msg__Twist *)msgin;
+//
+//  // 检查消息指针是否有效
+//  if (msg == NULL) {
+//    return;
+//  }
+//
+//  cmd_vel_msg = *msg;
+//
+//  // 获取当前时间 (毫秒)
+//  uint32_t current_time = HAL_GetTick();
+//
+//  // 计算时间差 (秒)
+//  float dt = 0.0f;
+//  if (last_cmd_vel_time != 0) {
+//	dt = (current_time - last_cmd_vel_time) / 1000.0f;
+//	float dx_robot = cmd_vel_msg.linear.x * dt;
+//	float dy_robot = cmd_vel_msg.linear.y * dt;
+//	//      float cos_yaw = cosf(current_yaw);
+//	//      float sin_yaw = sinf(current_yaw);
+//	//
+//	//      float dx_world = dx_robot * cos_yaw - dy_robot * sin_yaw;
+//	//      float dy_world = dx_robot * sin_yaw + dy_robot * cos_yaw;
+//
+//	  // 更新位置
+//	//      pose_msg.pose.pose.position.x += dx_world;
+//	//      pose_msg.pose.pose.position.y += dy_world;
+//	  // pose_msg.pose.pose.position.z += cmd_vel_msg.linear.z * dt;
+//	  pose_msg.pose.pose.position.x += dx_robot;
+//	  pose_msg.pose.pose.position.y += dy_robot;
+//
+//	  // 更新偏航角
+//	  current_yaw += cmd_vel_msg.angular.z * dt;
+//
+//	  // 将偏航角限制在 [-π, π] 范围内
+//	  while (current_yaw > M_PI) current_yaw -= 2.0f * M_PI;
+//	  while (current_yaw < -M_PI) current_yaw += 2.0f * M_PI;
+//
+//	  pose_msg.pose.pose.orientation.z = current_yaw;
+//
+//	  pose_msg.twist.twist.linear.x = cmd_vel_msg.linear.x;
+//	  pose_msg.twist.twist.linear.y = cmd_vel_msg.linear.y;
+//	  pose_msg.twist.twist.angular.z = cmd_vel_msg.angular.z;
+//
+////	  rcl_publish(&pose_pub, &pose_msg, NULL);
+//  }
+//
+//  last_cmd_vel_time = current_time;
 }
 
 void pose_pub_timer_cb(rcl_timer_t * timer, int64_t last_call_time) {
+	rcl_publish(&arm_pub, &arm_msg, NULL);
+	if(arm_msg.data == cmd_arm_msg.data) arm_pub_cb(0);
   // 更新时间戳
-  uint32_t current_tick = HAL_GetTick();
-  pose_msg.header.stamp.sec = current_tick / 1000;
-  pose_msg.header.stamp.nanosec = (current_tick % 1000) * 1000000;
-  
-  rcl_ret_t ret = rcl_publish(&pose_pub, &pose_msg, NULL);
+//  uint32_t current_tick = HAL_GetTick();
+//  pose_msg.header.stamp.sec = current_tick / 1000;
+//  pose_msg.header.stamp.nanosec = (current_tick % 1000) * 1000000;
+//
+//  rcl_ret_t ret = rcl_publish(&pose_pub, &pose_msg, NULL);
   
   // 可选：添加调试信息（如果需要的话）
   // printf("Published pose: x=%.2f, y=%.2f, yaw=%.2f, ret=%d\n", 
@@ -289,9 +291,13 @@ void cmd_arm_sub_cb(const void* msgin) {
   const std_msgs__msg__Int32 * msg = (const std_msgs__msg__Int32 *)msgin;
   cmd_arm_msg = *msg;
   code = cmd_arm_msg.data;
-  arm_msg = cmd_arm_msg;
+//  arm_msg = cmd_arm_msg;
+  std_msgs__msg__Int32 reply_msg;
+  reply_msg.data = 100;
+  rcl_publish(&arm_pub, &reply_msg, NULL);
 }
 
-void arm_pub_cb(){
-	rcl_publish(&arm_pub, &arm_msg, NULL);
+void arm_pub_cb(int complete){
+	if(complete) arm_msg = cmd_arm_msg;
+	else arm_msg.data = 0;
 }

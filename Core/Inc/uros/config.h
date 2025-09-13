@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 // micro-ROS configuration
-#define NODE_NAME "arm_cubeMX_node"
+#define NODE_NAME "cubeMX_node"
 #define DOMAIN_ID 0
 #define FREQUENCY 20
 #define USARTx huart2

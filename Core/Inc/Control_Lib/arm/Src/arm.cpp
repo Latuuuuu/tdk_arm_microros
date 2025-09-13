@@ -3,6 +3,8 @@
 #include "UART_servo.h"
 #include "stm32f4xx_hal.h"
 #include "motor_monitor.hpp"
+#include <stdint.h>
+#include <stdbool.h>
 
 extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim5;
@@ -137,6 +139,7 @@ void menu_camera(void) {
 		servo3.run();
 		if(current_time-last_command_time>2000){
 			all_status = 1;
+			arm_status = 1;
 			last_command_time = current_time;
 		}
 	}
@@ -181,6 +184,7 @@ void menu_arm_2(void) {
 		servo3.run();
 		if(current_time-last_command_time>2000){
 			all_status = 1;
+			arm_status = 1;
 			last_command_time = current_time;
 		}
 	}
@@ -271,6 +275,7 @@ void table_arm_3(void) {
 		servo3.run();
 		if(current_time-last_command_time>2000){
 			all_status = 1;
+			arm_status = 1;
 			last_command_time = current_time;
 		}
 	}
@@ -283,21 +288,21 @@ void table_arm_3(void) {
 }
 
 void arm_test(void) {
-	cascade_monitor(500);
-	if(cascade_complete()){
-		servo1.update_pos(pos1+a);
-		servo2.update_pos(pos2+b);
-		servo3.update_pos(gripper_open);
-		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-	}
+	cascade_monitor(cascade_height);
+//	if(cascade_complete()){
+//		servo1.update_pos(pos1+a);
+//		servo2.update_pos(pos2+b);
+//		servo3.update_pos(gripper_open);
+//		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
+//		servo1.run();
+//		servo2.run();
+//		servo3.run();
+//	}
+//	else{
+//		servo1.run();
+//		servo2.run();
+//		servo3.run();
+//	}
 }
 
 void arm_mission(int code) {
@@ -305,7 +310,6 @@ void arm_mission(int code) {
 	switch(code) {
 		case 1:
 			menu_camera();
-			arm_status = 1;
 			break;
 		case 2:
 			switch(arm_status){
@@ -313,12 +317,10 @@ void arm_mission(int code) {
 				menu_arm_1();
 				case 2:
 				menu_arm_2();
-				arm_status = 1;
 			}
 			break;
 		case 3:
 			table_camera();
-			arm_status = 1;
 			break;
 		case 4:
 			switch(arm_status){
@@ -328,7 +330,6 @@ void arm_mission(int code) {
 				table_arm_2();
 				case 3:
 				table_arm_3();
-				arm_status = 1;
 			}
 			break;
 		default:

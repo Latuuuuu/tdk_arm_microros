@@ -66,7 +66,7 @@ void uros_destroy_entities(void);
 void cmd_vel_sub_cb(const void* msgin);
 void cmd_arm_sub_cb(const void* msgin);
 void pose_pub_timer_cb(rcl_timer_t * timer, int64_t last_call_time);
-void arm_pub_cb();
+void arm_pub_cb(int);
 
 #ifdef __cplusplus
 }

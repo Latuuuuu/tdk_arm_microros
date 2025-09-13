@@ -7,7 +7,7 @@
 ../Core/Inc/uros/uros_init.cpp:119:6:void handle_state_agent_disconnected()	8	static
 ../Core/Inc/uros/uros_init.cpp:125:6:void uros_create_entities()	48	static
 ../Core/Inc/uros/uros_init.cpp:200:6:void uros_destroy_entities()	16	static
-../Core/Inc/uros/uros_init.cpp:222:6:void cmd_vel_sub_cb(const void*)	56	static
-../Core/Inc/uros/uros_init.cpp:273:6:void pose_pub_timer_cb(rcl_timer_t*, int64_t)	32	static
-../Core/Inc/uros/uros_init.cpp:288:6:void cmd_arm_sub_cb(const void*)	24	static
-../Core/Inc/uros/uros_init.cpp:295:6:void arm_pub_cb()	8	static
+../Core/Inc/uros/uros_init.cpp:222:6:void cmd_vel_sub_cb(const void*)	16	static
+../Core/Inc/uros/uros_init.cpp:273:6:void pose_pub_timer_cb(rcl_timer_t*, int64_t)	24	static
+../Core/Inc/uros/uros_init.cpp:290:6:void cmd_arm_sub_cb(const void*)	24	static
+../Core/Inc/uros/uros_init.cpp:300:6:void arm_pub_cb(int)	16	static

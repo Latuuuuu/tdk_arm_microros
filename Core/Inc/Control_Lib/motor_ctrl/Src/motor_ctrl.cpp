@@ -157,7 +157,7 @@ void MotorController::setgoal(float target_height) {
 
 	// PWM 越接近越慢
 	_pwmValue = (int)(MAX_PWM * fabs(_u));
-	if(_pwmValue > 500) _pwmValue = 500;
+	if(_pwmValue > 750) _pwmValue = 750;
 	if(_pwmValue < MIN_PWM) _pwmValue = MIN_PWM;
 //	__HAL_TIM_SET_COMPARE(&htim12, TIM_CHANNEL_1, (uint16_t)_pwmValue);
 	__HAL_TIM_SET_COMPARE(_pwm, _channel, (uint16_t)_pwmValue);
@@ -165,7 +165,7 @@ void MotorController::setgoal(float target_height) {
 }
 
 bool MotorController::goal_reached(){
-	if(fabs(_cascade_height-_targrt_height )<=1){
+	if(fabs(_cascade_height-_targrt_height )<=5){
 		__HAL_TIM_SET_COMPARE(_pwm, _channel,0);
 		return 1;
 	}

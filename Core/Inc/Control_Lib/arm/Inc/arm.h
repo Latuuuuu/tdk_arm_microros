@@ -10,6 +10,8 @@ extern "C" {
 
 // C 函數宣告
 extern float cascade_height;
+extern int arm_status;
+extern int all_status;
 
 void arm_reset(void);
 void cascade_go(float target_height);

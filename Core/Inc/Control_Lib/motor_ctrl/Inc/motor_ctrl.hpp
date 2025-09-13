@@ -63,7 +63,7 @@ private:
     int16_t _enc_count;
     float _u = 0.0;
     int MAX_PWM = 1000;
-    int MIN_PWM = 200;
+    int MIN_PWM = 50;
 //
 //    float ComputePID();                // PID controller
 //    float updateSpeed();               // Update the motor current speed
