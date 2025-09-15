@@ -1,5 +1,5 @@
-#include "motor_monitor.hpp"
-#include "motor_ctrl.hpp"
+#include "../Inc/motor_monitor.hpp"
+#include "../Inc/motor_ctrl.hpp"
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim5;
@@ -21,23 +21,15 @@ extern TIM_HandleTypeDef htim12;
 //    BR :B14   PC8      PA6/PA7
 //    BL :B15   PC9      PB6/PB7
 //
-MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_13, GPIOB, GPIO_PIN_12, 0.015, 0.0001, 0);
-
-float VgoalFR = 0.0;
-float VgoalFL = 0.0;
-float VgoalBR = 0.0;
-float VgoalBL = 0.0;
-
+MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_12, 1, 40, 0);
+float Vgoal = 0.0;
 
 void motor_init(){
-	// Motor_FR.init(1,-1);
-	// Motor_FL.init(1,1);
-	// Motor_BR.init(1,1);
-	// Motor_BL.init(1,1);
+	 Motor_cas.init(-1,-1);
 }
 
 void motor_monitor(void) {
-    // Motor_FR.setSpeed(VgoalFR);
+	Motor_cas.setSpeed(Vgoal);
     // Motor_BR.setSpeed(VgoalBR);
     // Motor_FL.setSpeed(VgoalFL);
     // Motor_BL.setSpeed(VgoalBL);

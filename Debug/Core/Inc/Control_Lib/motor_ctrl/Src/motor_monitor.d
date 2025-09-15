@@ -1,7 +1,7 @@
 Core/Inc/Control_Lib/motor_ctrl/Src/motor_monitor.o: \
  ../Core/Inc/Control_Lib/motor_ctrl/Src/motor_monitor.cpp \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_monitor.hpp \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_ctrl.hpp \
+ ../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_monitor.hpp \
+ ../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_ctrl.hpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -34,9 +34,9 @@ Core/Inc/Control_Lib/motor_ctrl/Src/motor_monitor.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/stm32f4xx_it.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_config.h
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_monitor.hpp:
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_ctrl.hpp:
+ ../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_config.h
+../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_monitor.hpp:
+../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_ctrl.hpp:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -69,4 +69,4 @@ Core/Inc/Control_Lib/motor_ctrl/Src/motor_monitor.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/stm32f4xx_it.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h:
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_config.h:
+../Core/Inc/Control_Lib/motor_ctrl/Src/../Inc/motor_config.h:
