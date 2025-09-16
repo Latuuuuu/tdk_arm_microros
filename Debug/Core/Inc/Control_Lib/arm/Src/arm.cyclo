@@ -1,14 +1,6 @@
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:28:5:UART_servo::UART_servo(uint16_t, uint16_t, UART_HandleTypeDef*)	1
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:49:6:void arm_reset()	1
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:129:6:void menu_camera()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:154:6:void menu_arm_1()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:179:6:void menu_arm_2()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:199:6:void table_camera()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:223:6:void table_arm_1()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:247:6:void table_arm_2()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:266:6:void table_arm_3()	3
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:290:6:void arm_test()	1
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:308:6:void arm_mission(int)	11
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:341:6:bool arm_complete()	2
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:351:1:void __static_initialization_and_destruction_0()	1
-../Core/Inc/Control_Lib/arm/Src/arm.cpp:351:1:cpp)	1
+/home/stanly/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:28:5:UART_servo::UART_servo(uint16_t, uint16_t, UART_HandleTypeDef*)	1
+/home/stanly/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/motor_ctrl/Inc/motor_ctrl.hpp:18:5:MotorController::MotorController(TIM_HandleTypeDef*, TIM_HandleTypeDef*, uint32_t, GPIO_TypeDef*, uint16_t, double, double, double)	1
+../Core/Inc/Control_Lib/arm/Src/arm.cpp:30:6:void arm_init()	1
+../Core/Inc/Control_Lib/arm/Src/arm.cpp:55:6:void arm_timer_callback()	1
+../Core/Inc/Control_Lib/arm/Src/arm.cpp:60:1:void __static_initialization_and_destruction_0()	1
+../Core/Inc/Control_Lib/arm/Src/arm.cpp:60:1:cpp)	1

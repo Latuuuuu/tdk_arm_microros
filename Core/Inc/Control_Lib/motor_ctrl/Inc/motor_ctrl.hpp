@@ -23,7 +23,7 @@ public:
     void setSpeed(float speed);        // Set motor speed in RPS
     float getSpeed();                  // Return the current speed (Need to enable setSpeed())
     void setgoal(float target_height);
-    bool goal_reached();
+    bool goal_reached(); // check if the goal is reached
 
 
 private:

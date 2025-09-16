@@ -107,7 +107,7 @@ float MotorController::updateSpeed() {
 //    _last_cnt = __HAL_TIM_GET_COUNTER(_enc);
 
 	cnt = __HAL_TIM_GetCounter(_enc);
-	_cascade_height += -(float)cnt / (4.0f * ENCODER_RESOLUTION * REDUCTION_RATIO)* 3.14 * 3.5;
+	_cascade_height += -(float)cnt / (4.0f * ENCODER_RESOLUTION * REDUCTION_RATIO) * 3.14 * 35;
 	_currentSpeed = (cnt/ENCODER_RESOLUTION / REDUCTION_RATIO / 4) / (DT / 1000.0);
     __HAL_TIM_SET_COUNTER(_enc, 0);
     _currentSpeed *= _en_ctrl;
@@ -129,10 +129,10 @@ void MotorController::setgoal(float target_height) {
 //	}
 //	if(_microswitch_touched==0 && _check ==1) _check--;
 
-	if(fabs(target_height - _cascade_height) <= e){
-		setSpeed(0);
+	if(fabs(_targrt_height - _cascade_height) <= 2.0){
+		setSpeed(0.0);
 	}
-	else if(target_height - _cascade_height>0) setSpeed(v);
+	else if(_targrt_height - _cascade_height>0) setSpeed(v);
 	else setSpeed(-v);
 
 //	// 讀取 encoder
@@ -178,12 +178,19 @@ void MotorController::setgoal(float target_height) {
 }
 
 bool MotorController::goal_reached(){
-	if(fabs(_cascade_height-_targrt_height )<=5){
-		__HAL_TIM_SET_COMPARE(_pwm, _channel,0);
-		return 1;
-	}
-	return 0;
+    if(fabs(_cascade_height-_targrt_height )<= 5){
+        return true;
+    }
+    return false;
 }
+
+// bool MotorController::goal_reached(){
+// 	if(fabs(_cascade_height-_targrt_height )<=5){
+// 		// __HAL_TIM_SET_COMPARE(_pwm, _channel,0);
+// 		return 1;
+// 	}
+// 	return 0;
+// }
 //double MotorController::updateSpeed() {
 //    if(_last_cnt == __HAL_TIM_GET_COUNTER(_enc)){
 //        _isRotating = false;

@@ -21,28 +21,28 @@ extern TIM_HandleTypeDef htim12;
 //    BR :B14   PC8      PA6/PA7
 //    BL :B15   PC9      PB6/PB7
 //
-MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_12, 1, 40, 0);
-float Vgoal = 0.0;
+// MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_12, 1, 40, 0);
+// float Vgoal = 0.0;
 
-void motor_init(){
-	 Motor_cas.init(-1,-1);
-}
+// void motor_init(){
+// 	 Motor_cas.init(-1,-1);
+// }
 
-void motor_monitor(void) {
-	Motor_cas.setSpeed(Vgoal);
-    // Motor_BR.setSpeed(VgoalBR);
-    // Motor_FL.setSpeed(VgoalFL);
-    // Motor_BL.setSpeed(VgoalBL);
-//    test = Motor_BR.getSpeed();
-//    Motor_BL.getSpeed();
-//    Motor_FR.getSpeed();
-//    Motor_FL.getSpeed();
-}
+// void motor_monitor(void) {
+// 	Motor_cas.setSpeed(Vgoal);
+//     // Motor_BR.setSpeed(VgoalBR);
+//     // Motor_FL.setSpeed(VgoalFL);
+//     // Motor_BL.setSpeed(VgoalBL);
+// //    test = Motor_BR.getSpeed();
+// //    Motor_BL.getSpeed();
+// //    Motor_FR.getSpeed();
+// //    Motor_FL.getSpeed();
+// }
 
-bool cascade_complete(){
-	return Motor_cas.goal_reached();
-}
+// bool cascade_complete(){
+// 	// return Motor_cas.goal_reached();
+// }
 
-void cascade_monitor(float target_height){
-	Motor_cas.setgoal(target_height);
-}
+// void cascade_monitor(float target_height){
+// 	Motor_cas.setgoal(target_height);
+// }

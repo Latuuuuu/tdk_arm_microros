@@ -3,6 +3,7 @@
 #include "UART_servo.h"
 #include "stm32f4xx_hal.h"
 #include "motor_monitor.hpp"
+#include "motor_ctrl.hpp"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -20,34 +21,14 @@ int pos1 = 110, pos2 = 101, pos3 = 30;
 int gripper_open = 60, gripper_close = 25;
 int camera_front = 25, camera_down = 118;
 
+// Cascade 物件
 #define CASCADE_STARTHIGHT 250.0f
 float cascade_height = CASCADE_STARTHIGHT; //cascade起始高度
+MotorController Motor_cas(&htim1, &htim12, TIM_CHANNEL_2, GPIOB, GPIO_PIN_12, 0.6, 30, 0);
 
-#define MAX_PWM 40 //??
-#define MIN_PWM 15
-#define ENCODER_RESOLUTION 100  // Encoder 脈衝數
-#define REDUCTION_RATIO 64.0f  // 減速比
-#define DELAY_MS 1             // 10ms 更新一次
 
-int16_t enc_count;
-int16_t count;
-int pwm_value = 0;
-float target_distance = 0;
-float distance = 0.0f;   // 累積距離
-int check=0;
-float kp = 0.001, ki = 0;
-float integral =0.0;
-int microswitch_touched = 0;
-
-float error, u;
-int a=0, b=0, c=0, d=113;
-
-int arm_status = 1;
-int all_status =0;
-static uint32_t last_command_time = 0;
-
-void arm_reset(void) {
-	// 手臂重置邏輯
+void arm_init(void) {
+	// 手臂初始化邏輯
 	HAL_Init();
 	// 啟動 Encoder 與 PWM
 	HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
@@ -61,6 +42,18 @@ void arm_reset(void) {
 	servo2.update_pos(pos2+100);
 	servo3.update_pos(gripper_close);
 
+	servo1.run();
+	servo2.run();
+	servo3.run();
+
+	// 初始化 Cascade
+	Motor_cas.init(-1,-1);
+	Motor_cas.setSpeed(0.0);
+}
+
+
+void arm_timer_callback(void) {		// constantly run the servo in timer callback
+	Motor_cas.setgoal(cascade_height);
 	servo1.run();
 	servo2.run();
 	servo3.run();
@@ -126,226 +119,226 @@ void arm_reset(void) {
 //		}
 //}
 
-void menu_camera(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250);
-	if(cascade_complete()){
-		servo1.update_pos(pos1+70);
-		servo2.update_pos(pos2+70);
-		servo3.update_pos(gripper_open);
-		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			all_status = 1;
-			arm_status = 1;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void menu_camera(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250);
+// 	if(cascade_complete()){
+// 		servo1.update_pos(pos1+70);
+// 		servo2.update_pos(pos2+70);
+// 		servo3.update_pos(gripper_open);
+// 		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			all_status = 1;
+// 			arm_status = 1;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void menu_arm_1(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250+324);
-	if(cascade_complete()){
-		servo1.update_pos(pos1-18);
-		servo2.update_pos(pos2-18);
-		servo3.update_pos(gripper_open);
+// void menu_arm_1(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250+324);
+// 	if(cascade_complete()){
+// 		servo1.update_pos(pos1-18);
+// 		servo2.update_pos(pos2-18);
+// 		servo3.update_pos(gripper_open);
 
-		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			arm_status = 2;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// 		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			arm_status = 2;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void menu_arm_2(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250+324);
-	if(cascade_complete()){
-		servo3.update_pos(gripper_close);
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			all_status = 1;
-			arm_status = 1;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void menu_arm_2(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250+324);
+// 	if(cascade_complete()){
+// 		servo3.update_pos(gripper_close);
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			all_status = 1;
+// 			arm_status = 1;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void table_camera(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250+29);
-	if(cascade_complete()){
-		servo1.update_pos(pos1-19); //35
-		servo2.update_pos(pos2-19); //90
-		servo3.update_pos(gripper_close);
-		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_down);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			all_status = 1;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void table_camera(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250+29);
+// 	if(cascade_complete()){
+// 		servo1.update_pos(pos1-19); //35
+// 		servo2.update_pos(pos2-19); //90
+// 		servo3.update_pos(gripper_close);
+// 		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_down);
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			all_status = 1;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void table_arm_1(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250+73);
-	if(cascade_complete()){
-		servo1.update_pos(pos1-56);
-		servo2.update_pos(pos2-56);
-		servo3.update_pos(gripper_close);
-		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			arm_status = 2;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void table_arm_1(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250+73);
+// 	if(cascade_complete()){
+// 		servo1.update_pos(pos1-56);
+// 		servo2.update_pos(pos2-56);
+// 		servo3.update_pos(gripper_close);
+// 		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*camera_front);
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			arm_status = 2;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void table_arm_2(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250+73);
-	if(cascade_complete()){
-		servo3.update_pos(gripper_open);
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			arm_status = 3;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void table_arm_2(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250+73);
+// 	if(cascade_complete()){
+// 		servo3.update_pos(gripper_open);
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			arm_status = 3;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void table_arm_3(void) {
-	uint32_t current_time = HAL_GetTick();
-	cascade_monitor(250);
-	if(cascade_complete()){
-		servo1.update_pos(pos1+70);
-		servo2.update_pos(pos2+100);
-		servo3.update_pos(gripper_open);
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		if(current_time-last_command_time>2000){
-			all_status = 1;
-			arm_status = 1;
-			last_command_time = current_time;
-		}
-	}
-	else{
-		servo1.run();
-		servo2.run();
-		servo3.run();
-		last_command_time = current_time;
-	}
-}
+// void table_arm_3(void) {
+// 	uint32_t current_time = HAL_GetTick();
+// 	cascade_monitor(250);
+// 	if(cascade_complete()){
+// 		servo1.update_pos(pos1+70);
+// 		servo2.update_pos(pos2+100);
+// 		servo3.update_pos(gripper_open);
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		if(current_time-last_command_time>2000){
+// 			all_status = 1;
+// 			arm_status = 1;
+// 			last_command_time = current_time;
+// 		}
+// 	}
+// 	else{
+// 		servo1.run();
+// 		servo2.run();
+// 		servo3.run();
+// 		last_command_time = current_time;
+// 	}
+// }
 
-void arm_test(void) {
-	cascade_monitor(cascade_height);
-//	if(cascade_complete()){
-//		servo1.update_pos(pos1+a);
-//		servo2.update_pos(pos2+b);
-//		servo3.update_pos(gripper_open);
-//		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
-//		servo1.run();
-//		servo2.run();
-//		servo3.run();
-//	}
-//	else{
-//		servo1.run();
-//		servo2.run();
-//		servo3.run();
-//	}
-}
+// void arm_test(void) {
+// 	cascade_monitor(cascade_height);
+// //	if(cascade_complete()){
+// //		servo1.update_pos(pos1+a);
+// //		servo2.update_pos(pos2+b);
+// //		servo3.update_pos(gripper_open);
+// //		__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, 600+10*c);
+// //		servo1.run();
+// //		servo2.run();
+// //		servo3.run();
+// //	}
+// //	else{
+// //		servo1.run();
+// //		servo2.run();
+// //		servo3.run();
+// //	}
+// }
 
-void arm_mission(int code) {
-	// 根據 code 執行不同的手臂任務
-	switch(code) {
-		case 1:
-			menu_camera();
-			break;
-		case 2:
-			switch(arm_status){
-				case 1:
-				menu_arm_1();
-				case 2:
-				menu_arm_2();
-			}
-			break;
-		case 3:
-			table_camera();
-			break;
-		case 4:
-			switch(arm_status){
-				case 1:
-				table_arm_1();
-				case 2:
-				table_arm_2();
-				case 3:
-				table_arm_3();
-			}
-			break;
-		default:
-			// 預設情況
-			break;
-	}
-}
+// void arm_mission(int code) {
+// 	// 根據 code 執行不同的手臂任務
+// 	switch(code) {
+// 		case 1:
+// 			menu_camera();
+// 			break;
+// 		case 2:
+// 			switch(arm_status){
+// 				case 1:
+// 				menu_arm_1();
+// 				case 2:
+// 				menu_arm_2();
+// 			}
+// 			break;
+// 		case 3:
+// 			table_camera();
+// 			break;
+// 		case 4:
+// 			switch(arm_status){
+// 				case 1:
+// 				table_arm_1();
+// 				case 2:
+// 				table_arm_2();
+// 				case 3:
+// 				table_arm_3();
+// 			}
+// 			break;
+// 		default:
+// 			// 預設情況
+// 			break;
+// 	}
+// }
 
-bool arm_complete(){
-	if(all_status)
-	{
-		all_status=0;
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-}
+// bool arm_complete(){
+// 	if(all_status)
+// 	{
+// 		all_status=0;
+// 		return 1;
+// 	}
+// 	else
+// 	{
+// 		return 0;
+// 	}
+// }

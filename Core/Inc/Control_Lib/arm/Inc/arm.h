@@ -13,15 +13,16 @@ extern float cascade_height;
 extern int arm_status;
 extern int all_status;
 
-void arm_reset(void);
-void cascade_go(float target_height);
-void menu_camera(void);
-void menu_arm(void);
-void table_camera(void);
-void table_arm(void);
-void arm_test(void);
-void arm_mission(int code);
-bool arm_complete();
+void arm_init(void);                   // init arm
+void arm_timer_callback(void);          // arm timer callback
+
+// void menu_camera(void);
+// void menu_arm(void);
+// void table_camera(void);
+// void table_arm(void);
+// void arm_test(void);
+// void arm_mission(int code);
+// bool arm_complete();
 
 #ifdef __cplusplus
 }

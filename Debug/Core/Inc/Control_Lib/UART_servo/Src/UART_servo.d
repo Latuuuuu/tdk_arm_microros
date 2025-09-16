@@ -1,6 +1,6 @@
 Core/Inc/Control_Lib/UART_servo/Src/UART_servo.o: \
  ../Core/Inc/Control_Lib/UART_servo/Src/UART_servo.cpp \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h \
+ /home/stanly/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -31,7 +31,7 @@ Core/Inc/Control_Lib/UART_servo/Src/UART_servo.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:
+/home/stanly/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:

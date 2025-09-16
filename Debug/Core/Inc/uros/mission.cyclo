@@ -1,0 +1,3 @@
+../Core/Inc/uros/mission.cpp:13:6:void mission_init()	1
+../Core/Inc/uros/mission.cpp:17:6:void mission_1(void*)	1
+../Core/Inc/uros/mission.cpp:29:6:void mission_2(void*)	1

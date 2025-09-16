@@ -5,4 +5,4 @@
 ../Core/Inc/Control_Lib/motor_ctrl/Src/motor_ctrl.cpp:60:7:float MotorController::ComputePID()	5
 ../Core/Inc/Control_Lib/motor_ctrl/Src/motor_ctrl.cpp:96:7:float MotorController::updateSpeed()	1
 ../Core/Inc/Control_Lib/motor_ctrl/Src/motor_ctrl.cpp:117:6:void MotorController::setgoal(float)	3
-../Core/Inc/Control_Lib/motor_ctrl/Src/motor_ctrl.cpp:180:6:bool MotorController::goal_reached()	5
+../Core/Inc/Control_Lib/motor_ctrl/Src/motor_ctrl.cpp:180:6:bool MotorController::goal_reached()	2
