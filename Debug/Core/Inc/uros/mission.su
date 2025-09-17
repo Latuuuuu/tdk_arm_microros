@@ -1,3 +1,4 @@
-../Core/Inc/uros/mission.cpp:13:6:void mission_init()	8	static
-../Core/Inc/uros/mission.cpp:17:6:void mission_1(void*)	16	static
-../Core/Inc/uros/mission.cpp:29:6:void mission_2(void*)	16	static
+../Core/Inc/uros/mission.cpp:14:6:void mission_init()	8	static
+../Core/Inc/uros/mission.cpp:18:6:void mission_ctrl()	16	static
+../Core/Inc/uros/mission.cpp:40:6:void mission_1(void*)	16	static
+../Core/Inc/uros/mission.cpp:52:6:void mission_2(void*)	16	static

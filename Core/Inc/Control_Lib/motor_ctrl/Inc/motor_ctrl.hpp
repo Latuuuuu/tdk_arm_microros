@@ -19,11 +19,14 @@ public:
         _enc(enc), _pwm(pwm), _channel(channel), _BGPIO(BGPIO), _BPin(BPin), _kp(kp), _ki(ki), _kd(kd){}
     ~MotorController() = default;
     
-    void init(int en_ctrl,int dir_ctrl);                        // Initialize the basic parameter
-    void setSpeed(float speed);        // Set motor speed in RPS
-    float getSpeed();                  // Return the current speed (Need to enable setSpeed())
+    void init(int en_ctrl,int dir_ctrl);      // Initialize the basic parameter
+    void setSpeed(float speed);               // Set motor target speed in RPS
+    void MotorOutput(void);                   // Output the PWM signal to motor
+    float getSpeed();                         // Return the current speed (Need to enable setSpeed())
     void setgoal(float target_height);
-    bool goal_reached(); // check if the goal is reached
+    bool goal_reached();                      // check if the goal is reached
+    float _cascade_height = 250.0;
+
 
 
 private:
@@ -56,7 +59,6 @@ private:
     int _en_ctrl = 0;
     int _dir_ctrl = 0;
     int _doupdatespeed = 0;
-    float _cascade_height = 250.0;
     int _check=0;
     int _microswitch_touched = 0;
     const float CASCADE_STARTHIGHT = 250.0;
@@ -64,7 +66,6 @@ private:
     float _u = 0.0;
     int MAX_PWM = 1000;
     int MIN_PWM = 50;
-//
     float ComputePID();                // PID controller
     float updateSpeed();               // Update the motor current speed
 };

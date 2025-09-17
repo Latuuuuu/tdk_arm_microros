@@ -9,23 +9,16 @@
 #include "uros_init.h"
 #include <math.h>
 #include <string.h>
+#include "arm.h"
+#include "mission.hpp"
 
-int code = -1;
 
-rcl_publisher_t           pose_pub;
-nav_msgs__msg__Odometry   pose_msg;
-rcl_subscription_t        cmd_vel_sub;
-geometry_msgs__msg__Twist cmd_vel_msg;
 rcl_publisher_t           arm_pub;
 std_msgs__msg__Int32      arm_msg;
 rcl_subscription_t        cmd_arm_sub;
 std_msgs__msg__Int32      cmd_arm_msg;
-rcl_timer_t pose_pub_timer;
+rcl_timer_t               pub_timer;
 
-// 用于计算积分的变量
-static uint32_t last_cmd_vel_time = 0;
-static uint32_t last_cmd_arm_time = 0;
-static float current_yaw = 0.0f;  // 当前偏航角 (弧度)
 
 rclc_support_t support;
 rcl_allocator_t allocator;
@@ -123,11 +116,6 @@ void handle_state_agent_disconnected(void) {
 
 
 void uros_create_entities(void) {
-  // 重置积分变量
-  last_cmd_vel_time = 0;
-  last_cmd_arm_time = 0;
-  current_yaw = 0.0f;
-
   allocator = rcl_get_default_allocator();
 
   init_options = rcl_get_zero_initialized_init_options();
@@ -141,19 +129,6 @@ void uros_create_entities(void) {
   rclc_node_init_default(&node, NODE_NAME, "", &support);                       // Initialize node
 
   rclc_publisher_init_default(                                                  // Initialize publisher for pose
-    &pose_pub,
-    &node,
-    ROSIDL_GET_MSG_TYPE_SUPPORT(nav_msgs, msg, Odometry),
-    "robot/pose");
-  pose_msg.pose.pose.position.x = 83.0;
-  pose_msg.pose.pose.position.y = 616.0;
-  pose_msg.pose.pose.position.z = 0.0;
-  pose_msg.pose.pose.orientation.x = 0.0;
-  pose_msg.pose.pose.orientation.y = 0.0;
-  pose_msg.pose.pose.orientation.z = 0.0;
-  pose_msg.pose.pose.orientation.w = 0.0;
-
-  rclc_publisher_init_default(                                                  // Initialize publisher for pose
     &arm_pub,
     &node,
     ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
@@ -161,24 +136,8 @@ void uros_create_entities(void) {
   arm_msg.data = -1;
 
   rmw_uros_set_publisher_session_timeout(                                       // Set session timeout for publisher
-    rcl_publisher_get_rmw_handle(&pose_pub),
-    10);
-
-  rmw_uros_set_publisher_session_timeout(                                       // Set session timeout for publisher
     rcl_publisher_get_rmw_handle(&arm_pub),
     10);
-
-  rclc_subscription_init_default(                                               // Initialize subscriber for command velocity
-    &cmd_vel_sub,
-    &node,
-    ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
-    "robot/cmd_vel");
-  cmd_vel_msg.linear.x = 0.0;
-  cmd_vel_msg.linear.y = 0.0;
-  cmd_vel_msg.linear.z = 0.0;
-  cmd_vel_msg.angular.x = 0.0;
-  cmd_vel_msg.angular.y = 0.0;
-  cmd_vel_msg.angular.z = 0.0;
 
   rclc_subscription_init_default(                                               // Initialize subscriber for arm command
     &cmd_arm_sub,
@@ -187,29 +146,28 @@ void uros_create_entities(void) {
     "robot/cmd_arm");
   cmd_arm_msg.data = -1;
 
+  rclc_timer_init_default(                                                      // Initialize timer for publishing pose
+    &pub_timer,
+    &support,
+    RCL_MS_TO_NS(100),
+    pub_timer_cb);
 
-  rclc_timer_init_default(&pose_pub_timer, &support, RCL_MS_TO_NS(50), pose_pub_timer_cb);
-
-  
-  rclc_executor_init(&executor, &support.context, 3, &allocator); // Create executor (1 timer + 2 subscriptions)
-
-  rclc_executor_add_subscription(&executor, &cmd_vel_sub, &cmd_vel_msg, &cmd_vel_sub_cb, ON_NEW_DATA); // Add subscriber to executor
+  rclc_executor_init(&executor, &support.context, 2, &allocator);               // Create executor (1 timer + 2 subscriptions)
   rclc_executor_add_subscription(&executor, &cmd_arm_sub, &cmd_arm_msg, &cmd_arm_sub_cb, ON_NEW_DATA); // Add arm subscriber to executor
-  rclc_executor_add_timer(&executor, &pose_pub_timer); // Add timer to executor
+  rclc_executor_add_timer(&executor, &pub_timer); // Add pose publisher timer to executor
 }
 void uros_destroy_entities(void) {
   rmw_context_t* rmw_context = rcl_context_get_rmw_context(&support.context);
   (void) rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0);
 
   // Destroy publisher
-  rcl_publisher_fini(&pose_pub, &node);
   rcl_publisher_fini(&arm_pub, &node);
 
-  // Destroy subscriber
-  rcl_subscription_fini(&cmd_vel_sub, &node);
+  // Destroy subscription
   rcl_subscription_fini(&cmd_arm_sub, &node);
 
-  rcl_timer_fini(&pose_pub_timer);
+  // Destroy timer
+  rcl_timer_fini(&pub_timer);
 
   // Destroy executor
   rclc_executor_fini(&executor);
@@ -219,85 +177,15 @@ void uros_destroy_entities(void) {
   rclc_support_fini(&support);
 }
 
-void cmd_vel_sub_cb(const void* msgin) {
-//  const geometry_msgs__msg__Twist * msg = (const geometry_msgs__msg__Twist *)msgin;
-//
-//  // 检查消息指针是否有效
-//  if (msg == NULL) {
-//    return;
-//  }
-//
-//  cmd_vel_msg = *msg;
-//
-//  // 获取当前时间 (毫秒)
-//  uint32_t current_time = HAL_GetTick();
-//
-//  // 计算时间差 (秒)
-//  float dt = 0.0f;
-//  if (last_cmd_vel_time != 0) {
-//	dt = (current_time - last_cmd_vel_time) / 1000.0f;
-//	float dx_robot = cmd_vel_msg.linear.x * dt;
-//	float dy_robot = cmd_vel_msg.linear.y * dt;
-//	//      float cos_yaw = cosf(current_yaw);
-//	//      float sin_yaw = sinf(current_yaw);
-//	//
-//	//      float dx_world = dx_robot * cos_yaw - dy_robot * sin_yaw;
-//	//      float dy_world = dx_robot * sin_yaw + dy_robot * cos_yaw;
-//
-//	  // 更新位置
-//	//      pose_msg.pose.pose.position.x += dx_world;
-//	//      pose_msg.pose.pose.position.y += dy_world;
-//	  // pose_msg.pose.pose.position.z += cmd_vel_msg.linear.z * dt;
-//	  pose_msg.pose.pose.position.x += dx_robot;
-//	  pose_msg.pose.pose.position.y += dy_robot;
-//
-//	  // 更新偏航角
-//	  current_yaw += cmd_vel_msg.angular.z * dt;
-//
-//	  // 将偏航角限制在 [-π, π] 范围内
-//	  while (current_yaw > M_PI) current_yaw -= 2.0f * M_PI;
-//	  while (current_yaw < -M_PI) current_yaw += 2.0f * M_PI;
-//
-//	  pose_msg.pose.pose.orientation.z = current_yaw;
-//
-//	  pose_msg.twist.twist.linear.x = cmd_vel_msg.linear.x;
-//	  pose_msg.twist.twist.linear.y = cmd_vel_msg.linear.y;
-//	  pose_msg.twist.twist.angular.z = cmd_vel_msg.angular.z;
-//
-////	  rcl_publish(&pose_pub, &pose_msg, NULL);
-//  }
-//
-//  last_cmd_vel_time = current_time;
-}
-
-void pose_pub_timer_cb(rcl_timer_t * timer, int64_t last_call_time) {
-	rcl_publish(&arm_pub, &arm_msg, NULL);
-	if(arm_msg.data == cmd_arm_msg.data) arm_pub_cb(0);
-  // 更新时间戳
-//  uint32_t current_tick = HAL_GetTick();
-//  pose_msg.header.stamp.sec = current_tick / 1000;
-//  pose_msg.header.stamp.nanosec = (current_tick % 1000) * 1000000;
-//
-//  rcl_ret_t ret = rcl_publish(&pose_pub, &pose_msg, NULL);
-  
-  // 可选：添加调试信息（如果需要的话）
-  // printf("Published pose: x=%.2f, y=%.2f, yaw=%.2f, ret=%d\n", 
-  //        pose_msg.pose.pose.position.x, 
-  //        pose_msg.pose.pose.position.y, 
-  //        current_yaw, ret);
-}
 
 void cmd_arm_sub_cb(const void* msgin) {
   const std_msgs__msg__Int32 * msg = (const std_msgs__msg__Int32 *)msgin;
   cmd_arm_msg = *msg;
-  code = cmd_arm_msg.data;
-//  arm_msg = cmd_arm_msg;
-  std_msgs__msg__Int32 reply_msg;
-  reply_msg.data = 100;
-  rcl_publish(&arm_pub, &reply_msg, NULL);
+  mission_type = cmd_arm_msg.data;
+  mission_ctrl();
 }
 
-void arm_pub_cb(int complete){
-	if(complete) arm_msg = cmd_arm_msg;
-	else arm_msg.data = 0;
+void pub_timer_cb(rcl_timer_t * timer, int64_t last_call_time){
+  arm_msg.data = mission_status;
+	rcl_publish(&arm_pub, &arm_msg, NULL);
 }

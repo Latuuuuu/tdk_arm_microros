@@ -10,19 +10,14 @@ extern "C" {
 
 // C 函數宣告
 extern float cascade_height;
-extern int arm_status;
-extern int all_status;
+extern int servo1_pos, servo2_pos, servo3_pos;
+extern int gripper_open, gripper_close;
+extern int camera_front, camera_down;
+extern int set_to_zero;
 
-void arm_init(void);                   // init arm
-void arm_timer_callback(void);          // arm timer callback
-
-// void menu_camera(void);
-// void menu_arm(void);
-// void table_camera(void);
-// void table_arm(void);
-// void arm_test(void);
-// void arm_mission(int code);
-// bool arm_complete();
+void arm_init(void);                        // init arm
+void arm_timer_callback(void);              // arm timer callback
+void arm_cascade_set_to_zero(void);         // set arm to zero position
 
 #ifdef __cplusplus
 }

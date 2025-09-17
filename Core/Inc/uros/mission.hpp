@@ -8,10 +8,12 @@ extern "C" {
 // Include statements
 
 extern int mission_type;
+extern int prev_mission_type;
 extern int mission_status;
 extern int task_created;
 
 void mission_init(void);
+void mission_ctrl(void);
 void mission_1(void *pvParameters);
 void mission_2(void *pvParameters);
 
