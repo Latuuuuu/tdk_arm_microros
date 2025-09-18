@@ -54,7 +54,12 @@ void mission_1(void *pvParameters){
     mission_status = 0;
     
     /* add motion here */
-    osDelay(5000);
+    cascade_height = 250;
+    servo1_pos = 180;
+    servo2_pos = 201;
+    servo3_pos = gripper_close;
+	osDelay(2000);
+//	osDelay(5000);
     /* add motion here */
 
     mission_status = mission_type;
@@ -66,7 +71,15 @@ void mission_2(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    osDelay(5000);
+    cascade_height = 574;
+	servo1_pos = 92;
+	servo2_pos = 83;
+	servo3_pos = gripper_open;
+    osDelay(3000);
+    cascade_height = 474;
+    osDelay(2000);
+	servo3_pos = gripper_close;
+    osDelay(2000);
     /* add motion here */
 
     mission_status = mission_type;
@@ -77,7 +90,11 @@ void mission_3(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    osDelay(5000);
+    cascade_height = 279;
+	servo1_pos = 91;
+	servo2_pos = 82;
+	servo3_pos = gripper_close;
+	osDelay(3000);
     /* add motion here */
 
     mission_status = mission_type;
@@ -89,7 +106,18 @@ void mission_4(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    osDelay(5000);
+    cascade_height = 423;
+	servo1_pos = 54;
+	servo2_pos = 45;
+	servo3_pos = gripper_close;
+	osDelay(3000);
+	cascade_height = 323;
+	servo3_pos = gripper_open;
+	osDelay(2000);
+	cascade_height = 250;
+	servo1_pos = 180;
+	servo2_pos = 201;
+	servo3_pos = gripper_open;
     /* add motion here */
 
     mission_status = mission_type;
