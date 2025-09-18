@@ -16,6 +16,8 @@ void mission_init(void);
 void mission_ctrl(void);
 void mission_1(void *pvParameters);
 void mission_2(void *pvParameters);
+void mission_3(void *pvParameters);
+void mission_4(void *pvParameters);
 
 
 #ifdef __cplusplus

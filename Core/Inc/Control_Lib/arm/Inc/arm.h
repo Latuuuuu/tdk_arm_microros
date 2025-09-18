@@ -17,7 +17,7 @@ extern int set_to_zero;
 
 void arm_init(void);                        // init arm
 void arm_timer_callback(void);              // arm timer callback
-void arm_cascade_set_to_zero(void);         // set arm to zero position
+void arm_cascade_set_to_zero(void* pvParameters);         // set arm to zero position
 
 #ifdef __cplusplus
 }

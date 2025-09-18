@@ -18,17 +18,30 @@ void mission_init(void){
 void mission_ctrl(void){
     if(prev_mission_type != mission_type){
         prev_mission_type = mission_type;
-        task_created = 1;
         switch (mission_type)
         {
         case 1:
             if (!task_created) {
+                task_created = 1;
                 xTaskCreate(mission_1, "mission_1", 512, NULL, 2, NULL);
             }
             break;
         case 2:
             if (!task_created) {
+                task_created = 1;
                 xTaskCreate(mission_2, "mission_2", 512, NULL, 2, NULL);
+            }
+            break;
+        case 3:
+            if (!task_created) {
+                task_created = 1;
+                xTaskCreate(mission_3, "mission_3", 512, NULL, 2, NULL);
+            }
+            break;
+        case 4:
+            if (!task_created) {
+                task_created = 1;
+                xTaskCreate(mission_4, "mission_4", 512, NULL, 2, NULL);
             }
             break;
         default:
@@ -41,7 +54,7 @@ void mission_1(void *pvParameters){
     mission_status = 0;
     
     /* add motion here */
-    
+    osDelay(5000);
     /* add motion here */
 
     mission_status = mission_type;
@@ -53,7 +66,30 @@ void mission_2(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    
+    osDelay(5000);
+    /* add motion here */
+
+    mission_status = mission_type;
+    task_created = 0;
+    vTaskDelete(NULL);  // Delete current task when mission is complete
+}
+void mission_3(void *pvParameters){
+    mission_status = 0;
+
+    /* add motion here */
+    osDelay(5000);
+    /* add motion here */
+
+    mission_status = mission_type;
+    task_created = 0;
+    vTaskDelete(NULL);  // Delete current task when mission is complete
+}
+
+void mission_4(void *pvParameters){
+    mission_status = 0;
+
+    /* add motion here */
+    osDelay(5000);
     /* add motion here */
 
     mission_status = mission_type;

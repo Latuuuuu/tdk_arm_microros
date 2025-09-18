@@ -18,7 +18,7 @@ extern int code;
 double LastCNT = 0;
 double CNT = 500;
 int pulse =0;
-double currentsp = 0;
+int currentsp = 0;
 int sec = 0;
 
 
@@ -30,7 +30,8 @@ void StartDefaultTask(void *argument)
 
     for(;;){
         uros_agent_status_check();
-        osDelay(1000/FREQUENCY);
+        osDelay(50);
+		currentsp ++;
     }
 }
 
@@ -40,6 +41,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM4)
 	{
 		arm_timer_callback();
+		sec ++;
 	}
   /* USER CODE END Callback 0 */
 	if (htim->Instance == TIM6)

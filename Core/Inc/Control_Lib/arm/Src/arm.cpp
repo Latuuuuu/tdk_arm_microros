@@ -52,8 +52,7 @@ void arm_init(void) {
 	// 初始化 Cascade
 	Motor_cas.init(-1,-1);								// 初始化 Cascade 馬達控制器
 	Motor_cas.setSpeed(0.0);							// 停止移動
-	arm_cascade_set_to_zero();							// 將 Cascade 歸零
-	started = 1;										// 系統初始化完成，可以開始移動 Cascade
+	xTaskCreate(arm_cascade_set_to_zero, "arm_cascade_set_to_zero", 512, NULL, 2, NULL); // 開啟 Cascade 歸零任務
 }
 
 
@@ -69,7 +68,7 @@ void arm_timer_callback(void) {							// constantly run the servo in timer callb
 }
 
 
-void arm_cascade_set_to_zero(void){
+void arm_cascade_set_to_zero(void* pvParameters){
 	set_to_zero = 0;
 	cascade_height = CASCADE_STARTHIGHT + 30.0f; 		// 設定目標高度為目前位置向上30mm
 	while(!Motor_cas.goal_reached()){
@@ -80,6 +79,8 @@ void arm_cascade_set_to_zero(void){
 		Motor_cas.setSpeed(-0.3f); 						// 以固定速度往下移動
 		osDelay(10);									// delay 10ms to avoid too high refreshing rate
 	}
+	started = 1;										// 系統初始化完成，可以開始移動 Cascade
+	vTaskDelete(NULL);  // Delete current task when mission is complete
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
