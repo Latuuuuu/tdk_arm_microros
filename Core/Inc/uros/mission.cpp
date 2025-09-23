@@ -55,10 +55,11 @@ void mission_1(void *pvParameters){
     
     /* add motion here */
     cascade_height = 250;
-    servo1_pos = 180;
-    servo2_pos = 201;
-    servo3_pos = gripper_close;
-	osDelay(2000);
+    servo1_pos = standard_pos_1 + 70;
+    servo2_pos = standard_pos_2 + 75;
+    servo3_pos = gripper_open;
+	camera_servo_pos = camera_front;
+	osDelay(5000);
 //	osDelay(5000);
     /* add motion here */
 
@@ -71,18 +72,20 @@ void mission_2(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    cascade_height = 574;
-	servo1_pos = 92;
-	servo2_pos = 83;
-	servo3_pos = gripper_open;
+    cascade_height = 447;
     osDelay(3000);
-    cascade_height = 474;
-    osDelay(2000);
+	servo1_pos = standard_pos_1 - 20;
+	servo2_pos = standard_pos_2 - 10;
+	servo3_pos = gripper_open;
+	camera_servo_pos = camera_front;
+    osDelay(10000);
 	servo3_pos = gripper_close;
-    osDelay(2000);
+    osDelay(10000);
     /* add motion here */
 
-    mission_status = mission_type;
+    mission_status = mission_type;//第一關終點
+    // goals_.push_back(create_goal(0, 0.0, 616.0, 4.71, 21, 0, 0, 20.0, 0.5));
+    // goals_.push_back(create_goal(0, 0.0, 616.0, 4.71, 10, 0, 0, 20.0, 0.5));
     task_created = 0;
     vTaskDelete(NULL);  // Delete current task when mission is complete
 }
@@ -90,11 +93,12 @@ void mission_3(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    cascade_height = 279;
-	servo1_pos = 91;
-	servo2_pos = 82;
+    cascade_height = 374;
+	servo1_pos = standard_pos_1 - 23;
+	servo2_pos = standard_pos_2 - 15;
 	servo3_pos = gripper_close;
-	osDelay(3000);
+	camera_servo_pos = camera_down;
+	osDelay(10000);
     /* add motion here */
 
     mission_status = mission_type;
@@ -106,18 +110,18 @@ void mission_4(void *pvParameters){
     mission_status = 0;
 
     /* add motion here */
-    cascade_height = 423;
-	servo1_pos = 54;
-	servo2_pos = 45;
+    cascade_height = 323;
+	servo1_pos = standard_pos_1 - 56;
+	servo2_pos = standard_pos_2 - 45;
 	servo3_pos = gripper_close;
-	osDelay(3000);
-	cascade_height = 323;
+	camera_servo_pos = camera_front;
+	osDelay(10000);
 	servo3_pos = gripper_open;
-	osDelay(2000);
+	osDelay(10000);
 	cascade_height = 250;
-	servo1_pos = 180;
-	servo2_pos = 201;
-	servo3_pos = gripper_open;
+	servo1_pos = standard_pos_1 + 77;
+	servo2_pos = standard_pos_2 + 77;
+	servo3_pos = gripper_close;
     /* add motion here */
 
     mission_status = mission_type;

@@ -8,19 +8,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-extern UART_HandleTypeDef huart3;
-extern TIM_HandleTypeDef htim5;
-extern TIM_HandleTypeDef htim1;
-extern TIM_HandleTypeDef htim12;
-
-
 // UART_servo 物件
 UART_servo servo1(1, 2000, &huart3);
 UART_servo servo2(3, 2000, &huart3);
 UART_servo servo3(4, 2000, &huart3);
-int servo1_pos = 180, servo2_pos = 201, servo3_pos = 25; 	// servo 初始位置
+int standard_pos_1 = 110,standard_pos_2 = 60;
 int gripper_open = 60, gripper_close = 25;
-int camera_front = 25, camera_down = 118;
+int servo1_pos = standard_pos_1 + 77, servo2_pos = standard_pos_2 + 77, servo3_pos = gripper_close; 	// servo 初始位置
+int camera_front = 600+10*25, camera_down = 600+10*118;
+int camera_servo_pos = camera_front;
 int set_to_zero = 0; 										// 設定 Cascade 歸零旗標	
 int started = 0; 											// 系統是否初始化完成，可以開始移動 Cascade
 
@@ -36,18 +32,20 @@ void arm_init(void) {
 	HAL_Init();
 	// 啟動 Encoder 與 PWM
 	HAL_TIM_Encoder_Start(&htim1, TIM_CHANNEL_ALL);
-	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
+//	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
 
 	servo1.update_pos(servo1_pos);
 	servo2.update_pos(servo2_pos);
-	servo3.update_pos(gripper_close);
+	servo3.update_pos(servo3_pos);
 
 	servo1.run();
 	servo2.run();
 	servo3.run();
+
+	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
 
 	// 初始化 Cascade
 	Motor_cas.init(-1,-1);								// 初始化 Cascade 馬達控制器
@@ -61,10 +59,11 @@ void arm_timer_callback(void) {							// constantly run the servo in timer callb
 	Motor_cas.MotorOutput();							// update the motor PWM output	
 	servo1.update_pos(servo1_pos);
 	servo2.update_pos(servo2_pos);
-	servo3.update_pos(gripper_close);
+	servo3.update_pos(servo3_pos);
 	servo1.run();
 	servo2.run();
 	servo3.run();
+	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
 }
 
 
@@ -80,6 +79,7 @@ void arm_cascade_set_to_zero(void* pvParameters){
 		osDelay(10);									// delay 10ms to avoid too high refreshing rate
 	}
 	started = 1;										// 系統初始化完成，可以開始移動 Cascade
+	cascade_height = 260;
 	vTaskDelete(NULL);  // Delete current task when mission is complete
 }
 

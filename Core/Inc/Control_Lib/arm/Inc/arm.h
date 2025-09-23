@@ -8,11 +8,17 @@
 extern "C" {
 #endif
 
+extern UART_HandleTypeDef huart3;
+extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim12;
 // C 函數宣告
 extern float cascade_height;
+extern int standard_pos_1,standard_pos_2;
 extern int servo1_pos, servo2_pos, servo3_pos;
 extern int gripper_open, gripper_close;
 extern int camera_front, camera_down;
+extern int camera_servo_pos;
 extern int set_to_zero;
 
 void arm_init(void);                        // init arm
