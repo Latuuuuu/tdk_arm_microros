@@ -73,14 +73,14 @@ void mission_2(void *pvParameters){
 
     /* add motion here */
     cascade_height = 447;
-    osDelay(3000);
+    osDelay(2500);
 	servo1_pos = standard_pos_1 - 20;
 	servo2_pos = standard_pos_2 - 10;
 	servo3_pos = gripper_open;
 	camera_servo_pos = camera_front;
-    osDelay(10000);
+    osDelay(2500);
 	servo3_pos = gripper_close;
-    osDelay(10000);
+    osDelay(2500);
     /* add motion here */
 
     mission_status = mission_type;//第一關終點
@@ -98,7 +98,7 @@ void mission_3(void *pvParameters){
 	servo2_pos = standard_pos_2 - 15;
 	servo3_pos = gripper_close;
 	camera_servo_pos = camera_down;
-	osDelay(10000);
+	osDelay(2500);
     /* add motion here */
 
     mission_status = mission_type;
@@ -115,9 +115,9 @@ void mission_4(void *pvParameters){
 	servo2_pos = standard_pos_2 - 45;
 	servo3_pos = gripper_close;
 	camera_servo_pos = camera_front;
-	osDelay(10000);
+	osDelay(2500);
 	servo3_pos = gripper_open;
-	osDelay(10000);
+	osDelay(2500);
 	cascade_height = 250;
 	servo1_pos = standard_pos_1 + 77;
 	servo2_pos = standard_pos_2 + 77;

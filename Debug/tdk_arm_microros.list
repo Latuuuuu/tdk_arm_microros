@@ -2762,8 +2762,8 @@ void mission_2(void *pvParameters){
  8001b6a:	4b1a      	ldr	r3, [pc, #104]	@ (8001bd4 <mission_2+0x78>)
  8001b6c:	4a1a      	ldr	r2, [pc, #104]	@ (8001bd8 <mission_2+0x7c>)
  8001b6e:	601a      	str	r2, [r3, #0]
-    osDelay(3000);
- 8001b70:	f640 30b8 	movw	r0, #3000	@ 0xbb8
+    osDelay(2500);
+ 8001b70:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001b74:	f006 fb0a 	bl	800818c <osDelay>
 	servo1_pos = standard_pos_1 - 20;
  8001b78:	4b18      	ldr	r3, [pc, #96]	@ (8001bdc <mission_2+0x80>)
@@ -2787,16 +2787,16 @@ void mission_2(void *pvParameters){
  8001b96:	681b      	ldr	r3, [r3, #0]
  8001b98:	4a17      	ldr	r2, [pc, #92]	@ (8001bf8 <mission_2+0x9c>)
  8001b9a:	6013      	str	r3, [r2, #0]
-    osDelay(10000);
- 8001b9c:	f242 7010 	movw	r0, #10000	@ 0x2710
+    osDelay(2500);
+ 8001b9c:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001ba0:	f006 faf4 	bl	800818c <osDelay>
 	servo3_pos = gripper_close;
  8001ba4:	4b15      	ldr	r3, [pc, #84]	@ (8001bfc <mission_2+0xa0>)
  8001ba6:	681b      	ldr	r3, [r3, #0]
  8001ba8:	4a11      	ldr	r2, [pc, #68]	@ (8001bf0 <mission_2+0x94>)
  8001baa:	6013      	str	r3, [r2, #0]
-    osDelay(10000);
- 8001bac:	f242 7010 	movw	r0, #10000	@ 0x2710
+    osDelay(2500);
+ 8001bac:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001bb0:	f006 faec 	bl	800818c <osDelay>
     /* add motion here */
 
@@ -2872,8 +2872,8 @@ void mission_3(void *pvParameters){
  8001c3a:	681b      	ldr	r3, [r3, #0]
  8001c3c:	4a13      	ldr	r2, [pc, #76]	@ (8001c8c <mission_3+0x84>)
  8001c3e:	6013      	str	r3, [r2, #0]
-	osDelay(10000);
- 8001c40:	f242 7010 	movw	r0, #10000	@ 0x2710
+	osDelay(2500);
+ 8001c40:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001c44:	f006 faa2 	bl	800818c <osDelay>
     /* add motion here */
 
@@ -2947,16 +2947,16 @@ void mission_4(void *pvParameters){
  8001cca:	681b      	ldr	r3, [r3, #0]
  8001ccc:	4a20      	ldr	r2, [pc, #128]	@ (8001d50 <mission_4+0xb8>)
  8001cce:	6013      	str	r3, [r2, #0]
-	osDelay(10000);
- 8001cd0:	f242 7010 	movw	r0, #10000	@ 0x2710
+	osDelay(2500);
+ 8001cd0:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001cd4:	f006 fa5a 	bl	800818c <osDelay>
 	servo3_pos = gripper_open;
  8001cd8:	4b1e      	ldr	r3, [pc, #120]	@ (8001d54 <mission_4+0xbc>)
  8001cda:	681b      	ldr	r3, [r3, #0]
  8001cdc:	4a1a      	ldr	r2, [pc, #104]	@ (8001d48 <mission_4+0xb0>)
  8001cde:	6013      	str	r3, [r2, #0]
-	osDelay(10000);
- 8001ce0:	f242 7010 	movw	r0, #10000	@ 0x2710
+	osDelay(2500);
+ 8001ce0:	f640 10c4 	movw	r0, #2500	@ 0x9c4
  8001ce4:	f006 fa52 	bl	800818c <osDelay>
 	cascade_height = 250;
  8001ce8:	4b10      	ldr	r3, [pc, #64]	@ (8001d2c <mission_4+0x94>)

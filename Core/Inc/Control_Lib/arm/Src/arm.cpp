@@ -15,7 +15,7 @@ UART_servo servo3(4, 2000, &huart3);
 int standard_pos_1 = 110,standard_pos_2 = 60;
 int gripper_open = 60, gripper_close = 25;
 int servo1_pos = standard_pos_1 + 77, servo2_pos = standard_pos_2 + 77, servo3_pos = gripper_close; 	// servo 初始位置
-int camera_front = 600+10*25, camera_down = 600+10*118;
+int camera_front = 600+10*10, camera_down = 600+10*113;
 int camera_servo_pos = camera_front;
 int set_to_zero = 0; 										// 設定 Cascade 歸零旗標	
 int started = 0; 											// 系統是否初始化完成，可以開始移動 Cascade
