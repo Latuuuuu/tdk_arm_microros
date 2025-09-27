@@ -12,11 +12,13 @@
 UART_servo servo1(1, 1000, &huart3);
 UART_servo servo2(3, 1000, &huart3);
 UART_servo servo3(4, 1000, &huart3);
-int standard_pos_1 = 110,standard_pos_2 = 60;
+int standard_pos_1 = 70,standard_pos_2 = 60;
 int gripper_open = 85, gripper_close = 25;
-int servo1_pos = standard_pos_1 + 77, servo2_pos = standard_pos_2 + 77, servo3_pos = gripper_close; 	// servo 初始位置
+int servo1_pos = standard_pos_1 + 90, servo2_pos = standard_pos_2 + 100, servo3_pos = gripper_close; 	// servo 初始位置
 int basket_pos1 = 240, basket_pos2 = 0, basket_grab = 200;
 int basket_right_pos = 500+200/180*basket_pos1, basket_left_pos = 500+1200/180*basket_pos2;
+int doll_pos1 = 180, doll_pos2 = 1, doll_extend = 0, doll_open = 80;
+int doll_arm_pos = 500+1200/180*doll_pos1, doll_claw_pos = 500+1200/180*doll_pos2;
 int camera_front = 600+10*10, camera_down = 600+10*113;
 int camera_servo_pos = camera_front;
 int set_to_zero = 0; 										// 設定 Cascade 歸零旗標	
@@ -38,6 +40,8 @@ void arm_init(void) {
 	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
 
@@ -50,6 +54,8 @@ void arm_init(void) {
 	servo3.run();
 
 	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, doll_arm_pos);
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, doll_claw_pos);
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, basket_right_pos);
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, basket_left_pos);
 
@@ -70,6 +76,8 @@ void arm_timer_callback(void) {							// constantly run the servo in timer callb
 	servo2.run();
 	servo3.run();
 	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, doll_arm_pos);
+	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, doll_claw_pos);
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, basket_right_pos);
     __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, basket_left_pos);
 }

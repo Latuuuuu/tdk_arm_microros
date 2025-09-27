@@ -105,7 +105,7 @@ void mission_2(void *pvParameters){
     task_created = 0;
     vTaskDelete(NULL);  // Delete current task when mission is complete
 }
-void mission_3(void *pvParameters){
+void mission_3(void *pvParameters){ //夾咖啡杯47
     mission_status = 0;
 
     /* add motion here */
@@ -167,6 +167,20 @@ void mission_6(void *pvParameters){ //竹簍開
     basket_right_pos = 500+200/180*basket_pos1;
     basket_left_pos = 500+1200/180*basket_pos2;
 	osDelay(1200);
+    /* add motion here */
+
+    mission_status = mission_type;
+    task_created = 0;
+    vTaskDelete(NULL);  // Delete current task when mission is complete
+}
+
+void mission_7(void *pvParameters){ //娃娃伸長然後放
+    mission_status = 0;
+
+    /* add motion here */
+    doll_arm_pos = 500+1200/180*doll_extend;
+    osDelay(2000);
+    doll_claw_pos = 500+1200/180*doll_open;
     /* add motion here */
 
     mission_status = mission_type;

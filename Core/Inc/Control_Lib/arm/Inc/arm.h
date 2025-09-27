@@ -23,6 +23,8 @@ extern int camera_servo_pos;
 extern int set_to_zero;
 extern int basket_pos1, basket_pos2, basket_grab;
 extern int basket_right_pos, basket_left_pos;
+extern int doll_arm_pos, doll_claw_pos;
+extern int doll_pos1, doll_pos2, doll_extend, doll_open;
 
 void arm_init(void);                        // init arm
 void arm_timer_callback(void);              // arm timer callback
