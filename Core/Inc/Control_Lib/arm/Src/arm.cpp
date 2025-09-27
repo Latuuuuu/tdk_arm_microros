@@ -13,8 +13,10 @@ UART_servo servo1(1, 2000, &huart3);
 UART_servo servo2(3, 2000, &huart3);
 UART_servo servo3(4, 2000, &huart3);
 int standard_pos_1 = 110,standard_pos_2 = 60;
-int gripper_open = 60, gripper_close = 25;
+int gripper_open = 85, gripper_close = 25;
 int servo1_pos = standard_pos_1 + 77, servo2_pos = standard_pos_2 + 77, servo3_pos = gripper_close; 	// servo 初始位置
+int basket_pos1 = 240, basket_pos2 = 0, basket_grab = 200;
+int basket_right_pos = 500+200/180*basket_pos1, basket_left_pos = 500+1200/180*basket_pos2;
 int camera_front = 600+10*10, camera_down = 600+10*113;
 int camera_servo_pos = camera_front;
 int set_to_zero = 0; 										// 設定 Cascade 歸零旗標	
@@ -36,6 +38,8 @@ void arm_init(void) {
 	HAL_TIM_PWM_Start(&htim12, TIM_CHANNEL_2);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 	HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_1);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
 
 	servo1.update_pos(servo1_pos);
 	servo2.update_pos(servo2_pos);
@@ -46,6 +50,8 @@ void arm_init(void) {
 	servo3.run();
 
 	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, basket_right_pos);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, basket_left_pos);
 
 	// 初始化 Cascade
 	Motor_cas.init(-1,-1);								// 初始化 Cascade 馬達控制器
@@ -64,6 +70,8 @@ void arm_timer_callback(void) {							// constantly run the servo in timer callb
 	servo2.run();
 	servo3.run();
 	__HAL_TIM_SET_COMPARE(&htim5, TIM_CHANNEL_1, camera_servo_pos);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, basket_right_pos);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_4, basket_left_pos);
 }
 
 

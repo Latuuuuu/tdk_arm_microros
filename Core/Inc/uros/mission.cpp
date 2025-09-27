@@ -44,6 +44,18 @@ void mission_ctrl(void){
                 xTaskCreate(mission_4, "mission_4", 512, NULL, 2, NULL);
             }
             break;
+        case 5:
+			if (!task_created) {
+				task_created = 1;
+				xTaskCreate(mission_5, "mission_5", 512, NULL, 2, NULL);
+			}
+			break;
+        case 6:
+			if (!task_created) {
+				task_created = 1;
+				xTaskCreate(mission_6, "mission_6", 512, NULL, 2, NULL);
+			}
+			break;
         default:
             break;
         }
@@ -117,11 +129,40 @@ void mission_4(void *pvParameters){
 	camera_servo_pos = camera_front;
 	osDelay(2500);
 	servo3_pos = gripper_open;
+	cascade_height = 473;
 	osDelay(2500);
 	cascade_height = 250;
 	servo1_pos = standard_pos_1 + 77;
 	servo2_pos = standard_pos_2 + 77;
 	servo3_pos = gripper_close;
+    /* add motion here */
+
+    mission_status = mission_type;
+    task_created = 0;
+    vTaskDelete(NULL);  // Delete current task when mission is complete
+}
+
+void mission_5(void *pvParameters){ //竹簍關
+    mission_status = 0;
+
+    /* add motion here */
+    basket_right_pos = 500+200/180*(basket_pos1-basket_grab);
+    basket_left_pos = 500+1200/180*(basket_pos2+basket_grab);
+	osDelay(2500);
+    /* add motion here */
+
+    mission_status = mission_type;
+    task_created = 0;
+    vTaskDelete(NULL);  // Delete current task when mission is complete
+}
+
+void mission_6(void *pvParameters){ //竹簍開
+    mission_status = 0;
+
+    /* add motion here */
+    basket_right_pos = 500+200/180*basket_pos1;
+    basket_left_pos = 500+1200/180*basket_pos2;
+	osDelay(2500);
     /* add motion here */
 
     mission_status = mission_type;

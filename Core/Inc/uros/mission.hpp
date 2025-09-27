@@ -18,7 +18,8 @@ void mission_1(void *pvParameters);
 void mission_2(void *pvParameters);
 void mission_3(void *pvParameters);
 void mission_4(void *pvParameters);
-
+void mission_5(void *pvParameters);
+void mission_6(void *pvParameters);
 
 #ifdef __cplusplus
 }

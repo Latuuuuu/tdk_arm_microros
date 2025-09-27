@@ -10,6 +10,7 @@ extern "C" {
 
 extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim12;
 // C 函數宣告
@@ -20,6 +21,8 @@ extern int gripper_open, gripper_close;
 extern int camera_front, camera_down;
 extern int camera_servo_pos;
 extern int set_to_zero;
+extern int basket_pos1, basket_pos2, basket_grab;
+extern int basket_right_pos, basket_left_pos;
 
 void arm_init(void);                        // init arm
 void arm_timer_callback(void);              // arm timer callback
