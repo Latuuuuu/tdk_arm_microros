@@ -66,12 +66,12 @@ void mission_1(void *pvParameters){
     mission_status = 0;
     
     /* add motion here */
-    cascade_height = 250;
+    cascade_height = 280;
     servo1_pos = standard_pos_1 + 70;
     servo2_pos = standard_pos_2 + 75;
     servo3_pos = gripper_open;
 	camera_servo_pos = camera_front;
-	osDelay(5000);
+	osDelay(1500);
 //	osDelay(5000);
     /* add motion here */
 
@@ -85,14 +85,18 @@ void mission_2(void *pvParameters){
 
     /* add motion here */
     cascade_height = 447;
-    osDelay(2500);
+    osDelay(2000);
 	servo1_pos = standard_pos_1 - 20;
 	servo2_pos = standard_pos_2 - 10;
 	servo3_pos = gripper_open;
 	camera_servo_pos = camera_front;
-    osDelay(2500);
+    osDelay(1500);
 	servo3_pos = gripper_close;
-    osDelay(2500);
+    osDelay(1200);
+    cascade_height = 497;
+    servo1_pos = standard_pos_1 + 77;
+    servo2_pos = standard_pos_2 + 77;
+	osDelay(1200);
     /* add motion here */
 
     mission_status = mission_type;//第一關終點
@@ -110,7 +114,7 @@ void mission_3(void *pvParameters){
 	servo2_pos = standard_pos_2 - 15;
 	servo3_pos = gripper_close;
 	camera_servo_pos = camera_down;
-	osDelay(2500);
+	osDelay(1500);
     /* add motion here */
 
     mission_status = mission_type;
@@ -123,14 +127,14 @@ void mission_4(void *pvParameters){
 
     /* add motion here */
     cascade_height = 323;
-	servo1_pos = standard_pos_1 - 56;
-	servo2_pos = standard_pos_2 - 45;
+	servo1_pos = standard_pos_1 - 50;
+	servo2_pos = standard_pos_2 - 42;
 	servo3_pos = gripper_close;
 	camera_servo_pos = camera_front;
-	osDelay(2500);
+	osDelay(1200);
 	servo3_pos = gripper_open;
 	cascade_height = 473;
-	osDelay(2500);
+	osDelay(1200);
 	cascade_height = 250;
 	servo1_pos = standard_pos_1 + 77;
 	servo2_pos = standard_pos_2 + 77;
@@ -148,7 +152,7 @@ void mission_5(void *pvParameters){ //竹簍關
     /* add motion here */
     basket_right_pos = 500+200/180*(basket_pos1-basket_grab);
     basket_left_pos = 500+1200/180*(basket_pos2+basket_grab);
-	osDelay(2500);
+	osDelay(1200);
     /* add motion here */
 
     mission_status = mission_type;
@@ -162,7 +166,7 @@ void mission_6(void *pvParameters){ //竹簍開
     /* add motion here */
     basket_right_pos = 500+200/180*basket_pos1;
     basket_left_pos = 500+1200/180*basket_pos2;
-	osDelay(2500);
+	osDelay(1200);
     /* add motion here */
 
     mission_status = mission_type;

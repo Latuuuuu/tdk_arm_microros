@@ -9,9 +9,9 @@
 #include <stdbool.h>
 
 // UART_servo 物件
-UART_servo servo1(1, 2000, &huart3);
-UART_servo servo2(3, 2000, &huart3);
-UART_servo servo3(4, 2000, &huart3);
+UART_servo servo1(1, 1000, &huart3);
+UART_servo servo2(3, 1000, &huart3);
+UART_servo servo3(4, 1000, &huart3);
 int standard_pos_1 = 110,standard_pos_2 = 60;
 int gripper_open = 85, gripper_close = 25;
 int servo1_pos = standard_pos_1 + 77, servo2_pos = standard_pos_2 + 77, servo3_pos = gripper_close; 	// servo 初始位置
@@ -87,7 +87,7 @@ void arm_cascade_set_to_zero(void* pvParameters){
 		osDelay(10);									// delay 10ms to avoid too high refreshing rate
 	}
 	started = 1;										// 系統初始化完成，可以開始移動 Cascade
-	cascade_height = 260;
+	cascade_height = 280;
 	vTaskDelete(NULL);  // Delete current task when mission is complete
 }
 
