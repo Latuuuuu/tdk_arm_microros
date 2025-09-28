@@ -6,3 +6,4 @@
 ../Core/Inc/uros/mission.cpp:125:6:void mission_4(void*)	1
 ../Core/Inc/uros/mission.cpp:149:6:void mission_5(void*)	1
 ../Core/Inc/uros/mission.cpp:163:6:void mission_6(void*)	1
+../Core/Inc/uros/mission.cpp:177:6:void mission_7(void*)	1

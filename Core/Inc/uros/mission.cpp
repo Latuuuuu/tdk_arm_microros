@@ -27,23 +27,23 @@ void mission_ctrl(void){
             }
             break;
         case 2:
-            if (!task_created) {
-                task_created = 1;
-                xTaskCreate(mission_2, "mission_2", 512, NULL, 2, NULL);
-            }
-            break;
+			if (!task_created) {
+				task_created = 1;
+				xTaskCreate(mission_2, "mission_2", 512, NULL, 2, NULL);
+			}
+			break;
         case 3:
-            if (!task_created) {
-                task_created = 1;
-                xTaskCreate(mission_3, "mission_3", 512, NULL, 2, NULL);
-            }
-            break;
+			if (!task_created) {
+				task_created = 1;
+				xTaskCreate(mission_3, "mission_3", 512, NULL, 2, NULL);
+			}
+			break;
         case 4:
-            if (!task_created) {
-                task_created = 1;
-                xTaskCreate(mission_4, "mission_4", 512, NULL, 2, NULL);
-            }
-            break;
+			if (!task_created) {
+				task_created = 1;
+				xTaskCreate(mission_4, "mission_4", 512, NULL, 2, NULL);
+			}
+			break;
         case 5:
 			if (!task_created) {
 				task_created = 1;
@@ -66,7 +66,7 @@ void mission_1(void *pvParameters){
     mission_status = 0;
     
     /* add motion here */
-    cascade_height = 280;
+    cascade_height = 300;
     servo1_pos = standard_pos_1 + 70;
     servo2_pos = standard_pos_2 + 75;
     servo3_pos = gripper_open;
@@ -87,7 +87,7 @@ void mission_2(void *pvParameters){
     cascade_height = 447;
     osDelay(2000);
 	servo1_pos = standard_pos_1 - 20;
-	servo2_pos = standard_pos_2 - 10;
+	servo2_pos = standard_pos_2 - 5;
 	servo3_pos = gripper_open;
 	camera_servo_pos = camera_front;
     osDelay(1500);
@@ -109,9 +109,9 @@ void mission_3(void *pvParameters){ //夾咖啡杯47
     mission_status = 0;
 
     /* add motion here */
-    cascade_height = 374;
+    cascade_height = 370;
 	servo1_pos = standard_pos_1 - 23;
-	servo2_pos = standard_pos_2 - 15;
+	servo2_pos = standard_pos_2 - 20;
 	servo3_pos = gripper_close;
 	camera_servo_pos = camera_down;
 	osDelay(1500);
