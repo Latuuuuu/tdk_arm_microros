@@ -14,7 +14,7 @@ UART_servo servo1(1, 1000, &huart3);
 UART_servo servo2(3, 1000, &huart3);
 UART_servo servo3(4, 1000, &huart3);
 int standard_pos_1 = 70,standard_pos_2 = 60;
-int gripper_open = 85, gripper_close = 25;
+int gripper_open = 75, gripper_close = 23;
 int servo1_pos = standard_pos_1 + 90, servo2_pos = standard_pos_2 + 100, servo3_pos = gripper_close; 	// servo 初始位置
 int basket_pos1 = 240, basket_pos2 = 0, basket_grab = 200;
 int basket_right_pos = 500+200/180*basket_pos1, basket_left_pos = 500+1200/180*basket_pos2;
