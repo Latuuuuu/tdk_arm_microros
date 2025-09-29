@@ -6,7 +6,7 @@
 #include "timers.h"
 #include "uros_init.h"
 #include "arm.h"
-
+#include "mission_ctrl.h"
 
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim12;
@@ -41,6 +41,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM4)
 	{
 		arm_timer_callback();
+		send_mission();
 		sec ++;
 	}
   /* USER CODE END Callback 0 */

@@ -24,8 +24,6 @@ Core/Inc/uros/uros_init.o: ../Core/Inc/uros/uros_init.cpp \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
@@ -216,8 +214,8 @@ Core/Inc/uros/uros_init.o: ../Core/Inc/uros/uros_init.cpp \
  ../Core/Inc/uros/config.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/arm/Inc/arm.h \
- /home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h \
+ /home/ling/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/arm/Inc/arm.h \
+ /home/ling/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h \
  ../Core/Inc/uros/mission.hpp
 ../Core/Inc/uros/uros_init.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h:
@@ -244,8 +242,6 @@ Core/Inc/uros/uros_init.o: ../Core/Inc/uros/uros_init.cpp \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
-../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h:
-../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
@@ -436,6 +432,6 @@ Core/Inc/uros/uros_init.o: ../Core/Inc/uros/uros_init.cpp \
 ../Core/Inc/uros/config.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/arm/Inc/arm.h:
-/home/latuuu/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:
+/home/ling/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/arm/Inc/arm.h:
+/home/ling/STM32CubeIDE/workspace_1.19.0/tdk_arm_microros/Core/Inc/Control_Lib/UART_servo/Inc/UART_servo.h:
 ../Core/Inc/uros/mission.hpp:

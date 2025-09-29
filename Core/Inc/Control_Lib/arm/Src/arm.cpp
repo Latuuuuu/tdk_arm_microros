@@ -7,6 +7,7 @@
 #include "cmsis_os.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include "../../../../Src/main_program/mission_ctrl.h"
 
 // UART_servo 物件
 UART_servo servo1(1, 1000, &huart3);
@@ -24,7 +25,8 @@ int camera_servo_pos = camera_front;
 int set_to_zero = 0; 										// 設定 Cascade 歸零旗標	
 int started = 0; 											// 系統是否初始化完成，可以開始移動 Cascade
 
-
+int mis_set_time = 0;
+extern int sec;												// 在 rtos-main.c 中定義的時間計數器
 // Cascade 物件
 #define CASCADE_STARTHIGHT 250.0f
 float cascade_height = CASCADE_STARTHIGHT; //cascade起始高度
@@ -106,5 +108,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		Motor_cas.setSpeed(0.0f);						// 停止移動
 		Motor_cas._cascade_height = CASCADE_STARTHIGHT;	// 重置 Cascade 量測高度
 		cascade_height = CASCADE_STARTHIGHT;			// 重置 Cascade 目標高度
+	}else if (GPIO_Pin == GPIO_PIN_13){
+		mission_set();
+		mis_set_time = sec;
 	}
 }

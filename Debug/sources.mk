@@ -41,6 +41,7 @@ SUBDIRS := \
 Core/Inc/Control_Lib/UART_servo/Src \
 Core/Inc/Control_Lib/arm/Src \
 Core/Inc/Control_Lib/motor_ctrl/Src \
+Core/Inc/Control_Lib/pusher \
 Core/Inc/uros \
 Core/Src \
 Core/Src/main_program \
