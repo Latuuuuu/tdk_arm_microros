@@ -20,7 +20,7 @@ void reset_x1();
 
 // 外部變數宣告
 extern bool mis_1, mis_2, mis_3, mis_4, mis_LR;
-extern int mis_num, mis_dir, mis_set;
+extern int mis_num, mis_dir, mis_set, x1_reset;
 extern bool mis_set_flag;
 
 #ifdef __cplusplus

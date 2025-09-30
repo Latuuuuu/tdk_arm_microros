@@ -11,10 +11,13 @@
 #include <string.h>
 #include "arm.h"
 #include "mission.hpp"
+#include "mission_ctrl.h"
 
 
 rcl_publisher_t           arm_pub;
 std_msgs__msg__Int32      arm_msg;
+rcl_publisher_t           mission_pub;
+std_msgs__msg__Int32      mission_msg;
 rcl_subscription_t        cmd_arm_sub;
 std_msgs__msg__Int32      cmd_arm_msg;
 rcl_timer_t               pub_timer;
@@ -139,6 +142,17 @@ void uros_create_entities(void) {
     rcl_publisher_get_rmw_handle(&arm_pub),
     10);
 
+  rclc_publisher_init_default(                                                  // Initialize publisher for pose
+    &mission_pub,
+    &node,
+    ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+    "mission_starter");
+  mission_msg.data = 0;
+
+  rmw_uros_set_publisher_session_timeout(                                       // Set session timeout for publisher
+    rcl_publisher_get_rmw_handle(&mission_pub),
+    10);
+
   rclc_subscription_init_default(                                               // Initialize subscriber for arm command
     &cmd_arm_sub,
     &node,
@@ -162,6 +176,8 @@ void uros_destroy_entities(void) {
 
   // Destroy publisher
   rcl_publisher_fini(&arm_pub, &node);
+
+  rcl_publisher_fini(&mission_pub, &node);
 
   // Destroy subscription
   rcl_subscription_fini(&cmd_arm_sub, &node);
@@ -187,5 +203,11 @@ void cmd_arm_sub_cb(const void* msgin) {
 
 void pub_timer_cb(rcl_timer_t * timer, int64_t last_call_time){
   arm_msg.data = mission_status;
-	rcl_publish(&arm_pub, &arm_msg, NULL);
+  rcl_publish(&arm_pub, &arm_msg, NULL);
+  if(x1_reset){
+	  mission_msg.data = -1;
+  }else{
+	  mission_msg.data = mis_set;
+  }
+  rcl_publish(&mission_pub, &mission_msg, NULL);
 }
