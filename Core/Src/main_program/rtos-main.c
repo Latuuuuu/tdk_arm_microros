@@ -20,6 +20,7 @@ double CNT = 500;
 int pulse =0;
 int currentsp = 0;
 int sec = 0;
+int sec_x1= 0;
 
 
 void StartDefaultTask(void *argument)
@@ -42,7 +43,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	{
 		arm_timer_callback();
 		send_mission();
+		reset_x1();
 		sec ++;
+		sec_x1++;
 	}
   /* USER CODE END Callback 0 */
 	if (htim->Instance == TIM6)

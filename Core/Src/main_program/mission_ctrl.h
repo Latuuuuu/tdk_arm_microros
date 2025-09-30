@@ -16,6 +16,7 @@ extern "C" {
 void read_btn_sta();
 void mission_set();
 void send_mission();
+void reset_x1();
 
 // 外部變數宣告
 extern bool mis_1, mis_2, mis_3, mis_4, mis_LR;

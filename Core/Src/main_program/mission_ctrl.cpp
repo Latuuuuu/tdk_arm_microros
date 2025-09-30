@@ -5,9 +5,14 @@ bool mis_1, mis_2, mis_3, mis_4, mis_LR;
 int mis_num = 0;
 int mis_dir = 0;
 int mis_set = 0; // send to x1
+int x1_reset = 0; //send to x1 0:normal  1:reset
 bool mis_set_flag = false;
+bool x1_reset_flag= false;
 extern int mis_set_time;
+extern int x1_reset_time;
 extern int sec;
+extern int sec_x1;
+
 void send_mission()
 {
     if (mis_set_flag){
@@ -19,6 +24,19 @@ void send_mission()
     }else{
         mis_set = 0;
     }
+}
+void reset_x1() {
+	if (x1_reset_flag) {
+		if (sec_x1 - x1_reset_time > 500) {
+			x1_reset_time = 0;
+			sec_x1 = 0;
+			x1_reset_flag = false;
+		} else {
+			x1_reset = 1;
+		}
+	} else {
+		x1_reset = 0;
+	}
 }
 void mission_set(){
     // 軟體去抖

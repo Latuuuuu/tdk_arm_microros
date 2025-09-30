@@ -26,7 +26,11 @@ int set_to_zero = 0; 										// 設定 Cascade 歸零旗標
 int started = 0; 											// 系統是否初始化完成，可以開始移動 Cascade
 
 int mis_set_time = 0;
+int x1_reset_time = 0;
+extern bool x1_reset_flag;
 extern int sec;												// 在 rtos-main.c 中定義的時間計數器
+extern int sec_x1;												// 在 rtos-main.c 中定義的時間計數器
+
 // Cascade 物件
 #define CASCADE_STARTHIGHT 250.0f
 float cascade_height = CASCADE_STARTHIGHT; //cascade起始高度
@@ -111,5 +115,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	}else if (GPIO_Pin == GPIO_PIN_13){
 		mission_set();
 		mis_set_time = sec;
+	}else if (GPIO_Pin == GPIO_PIN_3){
+		reset_x1();
+		x1_reset_time = sec_x1;
+		x1_reset_flag = true;
 	}
+
 }
